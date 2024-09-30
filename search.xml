@@ -4,9 +4,38 @@
   
     
     <entry>
+      <title>在线音乐播放器项目02</title>
+      <link href="/2024/10/01/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE02/"/>
+      <url>/2024/10/01/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE02/</url>
+      
+        <content type="html"><![CDATA[<h1 id="在线音乐播放器项目02"><a href="#在线音乐播放器项目02" class="headerlink" title="在线音乐播放器项目02"></a>在线音乐播放器项目02</h1><h3 id="目前进度"><a href="#目前进度" class="headerlink" title="目前进度"></a>目前进度</h3><h5 id="1-初步构建了上方导航栏，以及实现了搜索联想功能-如下图所示。"><a href="#1-初步构建了上方导航栏，以及实现了搜索联想功能-如下图所示。" class="headerlink" title="1.初步构建了上方导航栏，以及实现了搜索联想功能,如下图所示。"></a>1.初步构建了上方导航栏，以及实现了搜索联想功能,如下图所示。</h5><p><img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20241001003911303.png" alt="image-20241001003911303"></p><p>通过看之前的javaweb项目重新复习一遍了搜索联想功能的实现。</p><h5 id="2-设置了分页查询功能。"><a href="#2-设置了分页查询功能。" class="headerlink" title="2.设置了分页查询功能。"></a>2.设置了分页查询功能。</h5><p>这次的分页查询并没有像之前的web项目一样，通过每次点击相应的图标而发送请求到servlet中进行交互，而是通过vue的帮助，实现了一次获取数据即可实现分页查询功能，很是方便。</p><h5 id="3-重新设计了音乐播放器的显示"><a href="#3-重新设计了音乐播放器的显示" class="headerlink" title="3.重新设计了音乐播放器的显示"></a>3.重新设计了音乐播放器的显示</h5><p>由于html自带的audio标签的样式不是很好看，所以查找了各种信息，最终在B站找到了一个很不错的视频，通过该视频的学习，在另一个网页初步构建了新的音乐播放器，后续会完成该播放器其余内容后将其移植到当前的音乐播放器项目里。如下图所示。</p><p><img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20241001004512225.png" alt="image-20241001004512225"></p><p>学习视频链接【HTML+CSS3+JS实现音乐播放器项目】<a href="https://www.bilibili.com/video/BV1tj411N7SH?vd_source=ad14811b0629f215912c584fbe9d9875%E8%BF%99%E4%B8%AA%E8%A7%86%E9%A2%91%E5%8F%AF%E4%BB%A5%E8%AF%B4%E6%94%B6%E8%8E%B7%E7%9B%B8%E5%BD%93%E5%A4%9A%EF%BC%8C%E8%AE%A9%E6%88%91%E5%AF%B9%E7%BD%91%E9%A1%B5%E5%B8%83%E5%B1%80%E6%9C%89%E4%BA%86%E6%96%B0%E7%9A%84%E8%AE%A4%E8%AF%86%E5%92%8C%E6%9B%B4%E5%A5%BD%E7%9A%84%E5%86%99%E4%BB%A3%E7%A0%81%E9%80%BB%E8%BE%91%E4%B8%8E%E8%A7%84%E8%8C%83%E3%80%82">https://www.bilibili.com/video/BV1tj411N7SH?vd_source=ad14811b0629f215912c584fbe9d9875这个视频可以说收获相当多，让我对网页布局有了新的认识和更好的写代码逻辑与规范。</a></p><h3 id="收获"><a href="#收获" class="headerlink" title="收获"></a>收获</h3><p>我先把分页查询功能完善后，晚点再写吧</p><h3 id="吐槽"><a href="#吐槽" class="headerlink" title="吐槽"></a>吐槽</h3><p>我觉得网页最难懂的就是css了，样式太多了，设计页面好麻烦。我对前端内容不是很熟悉，所以在调整css样式方面可以说是相当难受，就是调整不到自己想要的显示效果，因为很多css属性我都是一点不清楚，问ai也是牛头不对马脚。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 项目 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> javaweb </tag>
+            
+            <tag> 音乐播放器 </tag>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>在线音乐播放器搭建项目01</title>
-      <link href="/2024/09/26/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E6%90%AD%E5%BB%BA%E9%A1%B9%E7%9B%AE01/"/>
-      <url>/2024/09/26/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E6%90%AD%E5%BB%BA%E9%A1%B9%E7%9B%AE01/</url>
+      <link href="/2024/09/26/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE01/"/>
+      <url>/2024/09/26/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE01/</url>
       
         <content type="html"><![CDATA[<h1 id="在线音乐播放器搭建项目01"><a href="#在线音乐播放器搭建项目01" class="headerlink" title="在线音乐播放器搭建项目01"></a>在线音乐播放器搭建项目01</h1><h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>在学了html,  css, javascript, tomcat，jdbc，jsp等内容之后，闲来无事,又学了maven和vue、mybatis的基础内容，想搭建一个在线音乐播放器的网站，希望是类似于qq音乐和网易云音乐之类的网页音乐播放页面，虽然是不可能的，但还是想着试着自己做一下这个项目来巩固自己所学的内容。</p><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>基于maven项目管理工具，同时遵循JavaEE的MVC设计模式搭建该项目。</p><h4 id="项目文件各部分内容说明："><a href="#项目文件各部分内容说明：" class="headerlink" title="项目文件各部分内容说明："></a>项目文件各部分内容说明：</h4><p><strong>数据库</strong>：先把音乐的相关数据存入到数据库maven当中的music表里，目前包含了四种字段，id, name（其实是文件存放位置）, img（图片存放位置） 和 singer。后期肯定是会添加新的列的，但暂时就放这四个字段。</p><p><strong>java</strong>:基于javaEE的三层架构创建相应文件。</p><p><img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20240926002554656.png" alt="image-20240926002554656"></p><p><strong>resources</strong>:存放所需配置文件。</p><p><img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20240926002656127.png" alt="image-20240926002656127"></p><p><strong>webapp</strong>: 存放除了java源码外的其他文件。</p><p><img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20240926002408273.png" alt="image-20240926002408273"></p><h2 id="进度"><a href="#进度" class="headerlink" title="进度"></a>进度</h2><p>由于对前端代码的不熟悉，在构建页面，调整css属性，写js相关代码上面花了不少时间（设置布局好头疼）。</p><p>在找合适的标签进行绑定点击事件时，我一共试了三个标签 <code>&lt;input&gt; &lt;a&gt; 和 &lt;button&gt;</code>,由于input的value与显示的内容一致，button的按钮外观不好看。所以选择了a标签，将其name属性来存放歌曲存放位置信息，这与其展示的文本不冲突，所以很nice。</p><p>一开始我并没有通过vue来渲染页面，而是直接以静态的代码形式布局网页，所以一开始的这段添加点击事件的代码就行不通了。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//给超链接添加点击事件，由于a标签是动态渲染的，所以js里面的这个方法不能添加到新渲染的a标签中</span></span><br><span class="line"><span class="comment">// var as = document.getElementsByClassName(&quot;music_a&quot;);</span></span><br><span class="line"><span class="comment">// for(var i = 0; i &lt; as.length; i++)&#123;</span></span><br><span class="line"><span class="comment">//     as[i].onclick = playMusic.bind(null, as[i]);</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure><p>而是转变成了更为简便的把onclick事件直接添加到一个v-for标签下的a标签中即可。</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a <span class="keyword">class</span>=<span class="string">&quot;music_a&quot;</span> v-<span class="attr">bind</span>:name=<span class="string">&quot;&#x27;/mvn01/&#x27;+music.name&quot;</span> onclick=<span class="string">&quot;playMusic(this)&quot;</span>&gt;&#123;&#123;music.<span class="property">name</span>.<span class="title function_">split</span>(<span class="string">&quot;/&quot;</span>)[<span class="number">1</span>].<span class="title function_">split</span>(<span class="string">&quot;.&quot;</span>)[<span class="number">0</span>]&#125;&#125;&lt;/a&gt;</span><br></pre></td></tr></table></figure><p>如下图所示，目前仅通过vue和axios把数据库的信息传递到网页上面并渲染。目前数据库里面就两个音乐信息，所以看着还行，后面肯定要做分页或者一个可下拉式的列表来应对多个数据的情况。</p><p><img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20240926003227508.png" alt="image-20240926003227508"></p><h2 id="后续计划"><a href="#后续计划" class="headerlink" title="后续计划"></a>后续计划</h2><h4 id="前端："><a href="#前端：" class="headerlink" title="前端："></a>前端：</h4><p>美化当前页面，在当前页面上方设计一个横式选择条或者右方设计一个可展开的页面选择条，来选择其他内容的页面。</p><p>给播放器添加字幕功能。</p><p>展示音乐列表的外观实现。</p><p>设置音乐播放界面。类似于<img src="C:\Users\33025\AppData\Roaming\Typora\typora-user-images\image-20240926010101221.png" alt="image-20240926010101221"></p><h4 id="后端："><a href="#后端：" class="headerlink" title="后端："></a>后端：</h4><p>做好各个页面间的数据交互。</p><h4 id="希望做到项目完成的时刻，加油！！！！！"><a href="#希望做到项目完成的时刻，加油！！！！！" class="headerlink" title="希望做到项目完成的时刻，加油！！！！！"></a>希望做到项目完成的时刻，加油！！！！！</h4>]]></content>
       
