@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>redis主从复制 | Journey</title><meta name="author" content="ldy"><meta name="copyright" content="ldy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="主从复制概念主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master&#x2F;leader)，后者称为从节点(slave&#x2F;follower) ; 数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave以读为主。 默认情况下，每台Redis服务器都是主节点 ;且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis主从复制">
+<meta property="og:url" content="http://example.com/2024/07/09/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/index.html">
+<meta property="og:site_name" content="Journey">
+<meta property="og:description" content="主从复制概念主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master&#x2F;leader)，后者称为从节点(slave&#x2F;follower) ; 数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave以读为主。 默认情况下，每台Redis服务器都是主节点 ;且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png">
+<meta property="article:published_time" content="2024-07-09T12:42:02.000Z">
+<meta property="article:modified_time" content="2024-09-21T07:18:32.767Z">
+<meta property="article:author" content="ldy">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png"><link rel="shortcut icon" href="/img/logo2.jpeg"><link rel="canonical" href="http://example.com/2024/07/09/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'redis主从复制',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-21 15:18:32'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://t.alcy.cc/fj/')"><nav id="nav"><span id="blog-info"><a href="/" title="Journey"><img class="site-icon" src="/img/logo.jpeg"/><span class="site-name">Journey</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">redis主从复制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-09T12:42:02.000Z" title="发表于 2024-07-09 20:42:02">2024-07-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-09-21T07:18:32.767Z" title="更新于 2024-09-21 15:18:32">2024-09-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="redis主从复制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="主从复制概念"><a href="#主从复制概念" class="headerlink" title="主从复制概念"></a>主从复制概念</h2><p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master&#x2F;leader)，后者称为从节点(slave&#x2F;follower) ; 数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave以读为主。</p>
+<p>默认情况下，每台Redis服务器都是主节点 ;且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。</p>
+<h2 id="Redis服务启动方式"><a href="#Redis服务启动方式" class="headerlink" title="Redis服务启动方式"></a>Redis服务启动方式</h2><h4 id="1-默认启动方式"><a href="#1-默认启动方式" class="headerlink" title="1.默认启动方式"></a>1.默认启动方式</h4><blockquote>
+<p> 服务端：.&#x2F;redis-server </p>
+<p>client端：.&#x2F;redis-cli </p>
+<p>退出： .&#x2F;redis-cli shutdown</p>
+</blockquote>
+<h4 id="2-指定端口启动"><a href="#2-指定端口启动" class="headerlink" title="2.指定端口启动"></a>2.指定端口启动</h4><blockquote>
+<p> 服务端：.&#x2F;redis-server –port 端口号 </p>
+<p>client端：.&#x2F;redis-cli -p 端口号 </p>
+<p>退出： .&#x2F;redis-cli -p 端口号 shutdown</p>
+</blockquote>
+<h4 id="3-指定端口ip连接"><a href="#3-指定端口ip连接" class="headerlink" title="3.指定端口ip连接"></a>3.指定端口ip连接</h4><blockquote>
+<p>服务端：.&#x2F;redis-server –port 端口号</p>
+<p>client端：.&#x2F;redis-cli -p 端口号 -h 127.0.0.1</p>
+</blockquote>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h4 id="1-获取当前redis的信息"><a href="#1-获取当前redis的信息" class="headerlink" title="1.获取当前redis的信息"></a>1.获取当前redis的信息</h4><p>注意默认端口为6379，且该端口默认为主节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis-server  //开启redis服务端, 默认port 6380 ip 127.0.0.1</span><br><span class="line"></span><br><span class="line">redis-cli  //连接到该redis服务端，默认port 6380 ip 127.0.0.1</span><br><span class="line"></span><br><span class="line">info replication  //查看当前redis的信息，含主从节点信息</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-获取子节点6380的信息"><a href="#2-获取子节点6380的信息" class="headerlink" title="2.获取子节点6380的信息"></a>2.获取子节点6380的信息</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis-server --port 6380  //开启端口为6380的服务端</span><br><span class="line"></span><br><span class="line">redis-cli -p 6380 (-h 127.0.0.1 若ip未改，默认可不写)  //redis的cli(客户端)指定端口与ip连接到指定的服务端</span><br><span class="line"></span><br><span class="line">info replication  //查看当前redis的信息，含主从节点信息</span><br></pre></td></tr></table></figure>
+
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><h4 id="1-复制端口号6379的redis配置文件到redis的执行目录"><a href="#1-复制端口号6379的redis配置文件到redis的执行目录" class="headerlink" title="1.复制端口号6379的redis配置文件到redis的执行目录"></a>1.复制端口号6379的redis配置文件到redis的执行目录</h4><p>查询redis的配置文件方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli config get dir</span><br></pre></td></tr></table></figure>
+
+<p>这个命令返回的是redis的安装目录，配置文件应位于该目录下，注意etc这个位置是其他文件存放位置</p>
+<h4 id="2-复制配置文件到要启动的redis其他端口的目录下-然后执行以下命令"><a href="#2-复制配置文件到要启动的redis其他端口的目录下-然后执行以下命令" class="headerlink" title="2.复制配置文件到要启动的redis其他端口的目录下,然后执行以下命令"></a>2.复制配置文件到要启动的redis其他端口的目录下,然后执行以下命令</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp redis.config redis-6380.config</span><br></pre></td></tr></table></figure>
+
+<p>拷贝的配置文件名自己定，如redis-6380.config</p>
+<h4 id="3-修改配置文件"><a href="#3-修改配置文件" class="headerlink" title="3.修改配置文件"></a>3.修改配置文件</h4><p>下载一个可以打开配置文件的编辑器，推荐subllime</p>
+<p>然后打开配置文件，用ctrl+f查询下面的语句然后进行修改</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 1. 修改端口号，一主多从模式，此教程中我默认是以6379为主，6380、6381为从</span><br><span class="line"></span><br><span class="line">port 6379</span><br><span class="line"></span><br><span class="line"># 2.开启守护进程模式运行，默认是no，这个要搜</span><br><span class="line"></span><br><span class="line">daemonize yes</span><br><span class="line"></span><br><span class="line"># 3. 修改pid文件名，我是以端口来区分的</span><br><span class="line"></span><br><span class="line">pidfile &quot;/var/run/redis_6379.pid&quot;</span><br><span class="line"></span><br><span class="line"># 4.拷贝多个 redis.conf 配置文件，并按照以上步骤修改配置文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="坑点"><a href="#坑点" class="headerlink" title="坑点"></a>坑点</h2><p>因为不了解ubuntu系统，导致我实现主从复制花了2个小时才成功。</p>
+<p>首先一定要先知道redis的服务启动方法，因为这个网上找的有些命令是错误的，导致我开启自定义端口的服务端一直有问题，本文所给命令是我经实践后成功的。</p>
+<p>其次，redis.config这个配置文件我找了半天，才发现在其他文件位置里。同时，要打开配置文件推荐使用sublime。</p>
+<p>最后，不一定要改在配置文件中配置主节点，可以在子节点使用 <code>slaveof 主节点id 主节点端口号</code> 命令来建立主从关系，但如果在配置文件中配置了，那么重启也就不会失效了。</p>
+<h2 id="重大发现"><a href="#重大发现" class="headerlink" title="重大发现"></a>重大发现</h2><p>原来我的操作还是有很大问题，初步了解了linux的命令行操作过后，发现了一个重点，这是针对我电脑的ubuntu系统实现redis主从复制的关键。</p>
+<p>依赖配置文件在服务器端启动redis的方式应该是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server 配置文件地址(例如：myredis/redis-6380.conf)</span><br></pre></td></tr></table></figure>
+
+<p>然后，重点来了，执行后，命令行提示我Permission Denied而无法启动redis,然后，我用root权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br></pre></td></tr></table></figure>
+
+<p>之后再次输入同样的启动语句，虽然没显示redis启动界面，而且看似好像没有发生任何事一样，你依旧可以输入其他语句。</p>
+<p>结果，当我再次打开终端输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -p 6380</span><br></pre></td></tr></table></figure>
+
+<p>发现成功在客户端启动这个redis服务器，随后输入的info replication显示的正是我所配置的redis-6380.conf文件.</p>
+<p>这个成功实现的方法网上找遍了解决方案都没有找到，居然被我误打误撞找到了原因所在。估计是我的这个root权限有点问题，没设置好的缘故。</p>
+<p>然后，就是<strong>服务端：.&#x2F;redis-server –port 端口号</strong> 这个启动redis服务器的方式估计是操作在默认文件夹下的配置文件，那个配置文件并没有被我修改过，所以查看主从关系时发现没有主从节点。</p>
+<p>所以还是要用<code>redis-server 配置文件地址(例如：myredis/redis-6380.conf)</code>这个方式来启动相应文件的redis服务器。</p>
+<h2 id="更新日志"><a href="#更新日志" class="headerlink" title="更新日志"></a>更新日志</h2><h4 id="9-21日"><a href="#9-21日" class="headerlink" title="9.21日"></a>9.21日</h4><p>之前配置实现主从节点后我发现主从的配置文件都变成了所属者为root，估计是以为配置文件里面的某些设置导致了主从设置后将配置文件的所有者改为了root，此外文件的读写权限也变成了只读。而且使用从节点进行写操作时会失败。</p>
+<p>修改文件所属者和读写权限只要依照下面两条命令执行即可，之后进行操作时，其所属者和读写权限并不会改变，所以还是不知道是什么原因导致我一开始实现主从复制后。权限改变的原因是什么。</p>
+<p>更改文件所属者的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chown username 配置文件的路径</span><br></pre></td></tr></table></figure>
+
+<p>更改文件读写权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a+rw 配置文件的路径</span><br></pre></td></tr></table></figure>
+
+<p>经过发现，redis配置文件里面有个<code>replica-read-only yes</code>的语句，这个语句表明了当前节点若是从节点的话，只能读取数据，不能修改数据，所以要把yes改为no。</p>
+<p>此外，在以普通用户执行<code>redis-server myredis/redis-6380.conf</code>这句命令启动我指定的redis配置文件的服务时，会提示我权限不够，这是因为在配置文件里的语句<code>dir 存放路径</code>没有配置好，导致访问了root权限才能访问的文件夹，这个语句是指定存放rdb文件的位置。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">ldy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/07/09/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">http://example.com/2024/07/09/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Journey</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/redis/">redis</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/07/30/Redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/" title="Redis哨兵模式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Redis哨兵模式</div></div></a></div><div class="next-post pull-right"><a href="/2024/07/07/redis01/" title="redis学习01"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">redis学习01</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/07/30/Redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/" title="Redis哨兵模式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-30</div><div class="title">Redis哨兵模式</div></div></a></div><div><a href="/2024/07/07/redis01/" title="redis学习01"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-07</div><div class="title">redis学习01</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">ldy</div><div class="author-info__description">I am a slow walker,but I never walk backwards.我走得很慢，但是我从来不会后退</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qcqwy"><i class="fab fa-github"></i><span>别点这里</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%A6%82%E5%BF%B5"><span class="toc-text">主从复制概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">Redis服务启动方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E9%BB%98%E8%AE%A4%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">1.默认启动方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%8C%87%E5%AE%9A%E7%AB%AF%E5%8F%A3%E5%90%AF%E5%8A%A8"><span class="toc-text">2.指定端口启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%8C%87%E5%AE%9A%E7%AB%AF%E5%8F%A3ip%E8%BF%9E%E6%8E%A5"><span class="toc-text">3.指定端口ip连接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8Dredis%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">1.获取当前redis的信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E5%AD%90%E8%8A%82%E7%82%B96380%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2.获取子节点6380的信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">工作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%A4%8D%E5%88%B6%E7%AB%AF%E5%8F%A3%E5%8F%B76379%E7%9A%84redis%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0redis%E7%9A%84%E6%89%A7%E8%A1%8C%E7%9B%AE%E5%BD%95"><span class="toc-text">1.复制端口号6379的redis配置文件到redis的执行目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%A4%8D%E5%88%B6%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E5%88%B0%E8%A6%81%E5%90%AF%E5%8A%A8%E7%9A%84redis%E5%85%B6%E4%BB%96%E7%AB%AF%E5%8F%A3%E7%9A%84%E7%9B%AE%E5%BD%95%E4%B8%8B-%E7%84%B6%E5%90%8E%E6%89%A7%E8%A1%8C%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4"><span class="toc-text">2.复制配置文件到要启动的redis其他端口的目录下,然后执行以下命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">3.修改配置文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%91%E7%82%B9"><span class="toc-text">坑点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E5%A4%A7%E5%8F%91%E7%8E%B0"><span class="toc-text">重大发现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97"><span class="toc-text">更新日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#9-21%E6%97%A5"><span class="toc-text">9.21日</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/11/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE03/" title="在线音乐播放器项目03">在线音乐播放器项目03</a><time datetime="2024-10-11T12:48:38.000Z" title="发表于 2024-10-11 20:48:38">2024-10-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/01/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE02/" title="在线音乐播放器项目02">在线音乐播放器项目02</a><time datetime="2024-09-30T16:35:16.000Z" title="发表于 2024-10-01 00:35:16">2024-10-01</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/26/%E5%9C%A8%E7%BA%BF%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E9%A1%B9%E7%9B%AE01/" title="在线音乐播放器搭建项目01">在线音乐播放器搭建项目01</a><time datetime="2024-09-25T16:06:44.000Z" title="发表于 2024-09-26 00:06:44">2024-09-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/07/30/Redis%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F/" title="Redis哨兵模式">Redis哨兵模式</a><time datetime="2024-07-30T00:31:34.000Z" title="发表于 2024-07-30 08:31:34">2024-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/07/09/redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" title="redis主从复制">redis主从复制</a><time datetime="2024-07-09T12:42:02.000Z" title="发表于 2024-07-09 20:42:02">2024-07-09</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://t.alcy.cc/fj/')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By ldy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
