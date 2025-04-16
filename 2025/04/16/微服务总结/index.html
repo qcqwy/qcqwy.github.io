@@ -1,0 +1,1136 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>微服务总结 | Journey</title><meta name="author" content="ldy"><meta name="copyright" content="ldy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、服务调用服务拆分之后，不可避免的会出现跨微服务的业务，此时微服务之间就需要进行远程调用。微服务之间的远程调用被称为RPC，即远程过程调用。RPC的实现方式有很多，比如：  基于Http协议 基于Dubbo协议  1.RestTemplateSpring给我们提供了一个RestTemplate的API，可以方便的实现Http请求的发送。 使用RestTemplate的基本步骤如下  注册Rest">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务总结">
+<meta property="og:url" content="http://example.com/2025/04/16/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Journey">
+<meta property="og:description" content="一、服务调用服务拆分之后，不可避免的会出现跨微服务的业务，此时微服务之间就需要进行远程调用。微服务之间的远程调用被称为RPC，即远程过程调用。RPC的实现方式有很多，比如：  基于Http协议 基于Dubbo协议  1.RestTemplateSpring给我们提供了一个RestTemplate的API，可以方便的实现Http请求的发送。 使用RestTemplate的基本步骤如下  注册Rest">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png">
+<meta property="article:published_time" content="2025-04-16T11:03:26.000Z">
+<meta property="article:modified_time" content="2025-04-16T11:04:33.706Z">
+<meta property="article:author" content="ldy">
+<meta property="article:tag" content="Springcloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png"><link rel="shortcut icon" href="/img/logo2.jpeg"><link rel="canonical" href="http://example.com/2025/04/16/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%80%BB%E7%BB%93/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '微服务总结',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-04-16 19:04:33'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://t.alcy.cc/fj/')"><nav id="nav"><span id="blog-info"><a href="/" title="Journey"><img class="site-icon" src="/img/logo.jpeg"/><span class="site-name">Journey</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">微服务总结</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-04-16T11:03:26.000Z" title="发表于 2025-04-16 19:03:26">2025-04-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-04-16T11:04:33.706Z" title="更新于 2025-04-16 19:04:33">2025-04-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/java/">java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="微服务总结"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一、服务调用"><a href="#一、服务调用" class="headerlink" title="一、服务调用"></a>一、服务调用</h1><p>服务拆分之后，不可避免的会出现跨微服务的业务，此时微服务之间就需要进行远程调用。微服务之间的远程调用被称为<strong>RPC</strong>，即远程过程调用。RPC的实现方式有很多，比如：</p>
+<ul>
+<li>基于Http协议</li>
+<li>基于Dubbo协议</li>
+</ul>
+<h2 id="1-RestTemplate"><a href="#1-RestTemplate" class="headerlink" title="1.RestTemplate"></a>1.RestTemplate</h2><p>Spring给我们提供了一个RestTemplate的API，可以方便的实现Http请求的发送。</p>
+<p>使用RestTemplate的基本步骤如下</p>
+<ul>
+<li>注册RestTemplate到Spring容器</li>
+<li>调用RestTemplate的API发送请求，常见方法有：<ul>
+<li>getForObject：发送Get请求并返回指定类型对象</li>
+<li>PostForObject：发送Post请求并返回指定类型对象</li>
+<li>put：发送PUT请求</li>
+<li>delete：发送Delete请求</li>
+<li><strong>exchange</strong>：发送任意类型请求，返回ResponseEntity</li>
+</ul>
+</li>
+</ul>
+<p><img src="/../images/image-20250410102942741.png" alt="image-20250410102942741"></p>
+<p>利用RestTemplate发送http请求与前端ajax发送请求非常相似，包含以下信息：</p>
+<ul>
+<li>1 请求路径</li>
+<li>2 请求方式</li>
+<li>3 请求体</li>
+<li>4 返回值类型</li>
+<li>5 请求参数</li>
+</ul>
+<h3 id="案例代码"><a href="#案例代码" class="headerlink" title="案例代码"></a>案例代码</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 2.查询商品</span><br><span class="line">ResponseEntity&lt;List&lt;ItemDTO&gt;&gt; response = restTemplate.exchange(</span><br><span class="line">        &quot;http://127.0.0.1:8081/items?ids=&#123;ids&#125;&quot;,</span><br><span class="line">        HttpMethod.GET,</span><br><span class="line">        null,</span><br><span class="line">        new ParameterizedTypeReference&lt;List&lt;ItemDTO&gt;&gt;() &#123;</span><br><span class="line">        &#125;,</span><br><span class="line">        Map.of(&quot;ids&quot;, CollUtils.join(itemIds, &quot;,&quot;))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h4 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h4><ol>
+<li><strong>第四个参数中为什么不能直接写 <code>List&lt;ItemDTO&gt;.class</code>？</strong></li>
+</ol>
+<p>在 Java 中，泛型类型在运行时会被擦除（即类型信息丢失）。这意味着 <code>List&lt;ItemDTO&gt;</code> 在运行时会被当作普通的 <code>List</code> 处理，而 <code>ItemDTO</code> 的类型信息会被丢弃。因此，<code>List&lt;ItemDTO&gt;.class</code> 是不合法的，因为 Java 无法在运行时识别 <code>List&lt;ItemDTO&gt;</code> 的具体类型。</p>
+<ol start="2">
+<li><strong><code>ParameterizedTypeReference</code> 的作用</strong></li>
+</ol>
+<p><code>ParameterizedTypeReference</code> 是 Spring 提供的一个工具类，用于显式地指定泛型类型。它通过匿名内部类的方式保留了泛型类型信息，使得 Spring 的 <code>RestTemplate</code> 可以正确解析返回值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">ParameterizedTypeReference</span>&lt;List&lt;ItemDTO&gt;&gt;() &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这行代码告诉 <code>RestTemplate</code>，返回值是一个 <code>List&lt;ItemDTO&gt;</code> 类型的对象。</p>
+<ol start="3">
+<li><strong>如果直接使用 <code>List.class</code> 会发生什么？</strong></li>
+</ol>
+<p>如果你直接使用 <code>List.class</code>，代码可能如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ResponseEntity&lt;List&gt; response = restTemplate.exchange(</span><br><span class="line">    <span class="string">&quot;http://127.0.0.1:8081/items?ids=&#123;ids&#125;&quot;</span>,</span><br><span class="line">    HttpMethod.GET,</span><br><span class="line">    <span class="literal">null</span>,</span><br><span class="line">    List.class,</span><br><span class="line">    Map.of(<span class="string">&quot;ids&quot;</span>, CollUtils.join(itemIds, <span class="string">&quot;,&quot;</span>))</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>这种情况下，<code>RestTemplate</code> 只知道返回值是一个 <code>List</code>，但不知道 <code>List</code> 中的元素类型是 <code>ItemDTO</code>。因此，<code>RestTemplate</code> 无法正确解析返回值为 <code>List&lt;ItemDTO&gt;</code>，可能会导致运行时错误。</p>
+<ol start="4">
+<li><strong>为什么需要 <code>ParameterizedTypeReference</code>？</strong></li>
+</ol>
+<p><code>ParameterizedTypeReference</code> 的设计正是为了解决泛型擦除的问题。它允许你在运行时保留泛型类型信息，使得 <code>RestTemplate</code> 能够正确解析返回值。</p>
+<h2 id="2-注册中心"><a href="#2-注册中心" class="headerlink" title="2.注册中心"></a>2.注册中心</h2><p>问题引入</p>
+<p>假设当前微服务面对高并发的调用请求，压力大。这时我们需要部署多个服务实例。</p>
+<p><img src="/../images/image-20250410103750346.png" alt="image-20250410103750346"></p>
+<p>此时，每个<code>item-service</code>的实例其IP或端口不同，那么问题来了：</p>
+<ul>
+<li>item-service这么多实例，cart-service如何知道每一个实例的地址？</li>
+<li>http请求要写url地址，<code>cart-service</code>服务到底该调用哪个实例呢？</li>
+<li>如果在运行过程中，某一个<code>item-service</code>实例宕机，<code>cart-service</code>依然在调用该怎么办？</li>
+<li>如果并发太高，<code>item-service</code>临时多部署了N台实例，<code>cart-service</code>如何知道新实例的地址？</li>
+</ul>
+<p>为了解决上述问题，就必须引入注册中心。</p>
+<h3 id="注册中心原理"><a href="#注册中心原理" class="headerlink" title="注册中心原理"></a>注册中心原理</h3><p>在微服务远程调用的过程中，包括两个角色：</p>
+<ul>
+<li>服务提供者：提供接口供其它微服务访问，比如<code>item-service</code></li>
+<li>服务消费者：调用其它微服务提供的接口，比如<code>cart-service</code></li>
+</ul>
+<p>在大型微服务项目中，服务提供者的数量会非常多，为了管理这些服务就引入了<strong>注册中心</strong>的概念。注册中心、服务提供者、服务消费者三者间关系如下：</p>
+<p><img src="/../images/image-20250410104201511.png" alt="image-20250410104201511"></p>
+<p>流程如下：</p>
+<ul>
+<li>服务启动时服务提供者就会注册自己的服务信息(服务名、IP、端口)到注册中心(按服务名决定归属哪个服务)。</li>
+<li>服务调用者可以从注册中心订阅想要的服务，获取服务对应的实例列表（一个服务可能有多实例部署）。</li>
+<li>服务调用者会对实例列表<strong>负载均衡</strong>，挑选一个实例调用。</li>
+<li>服务调用者挑选后向该实例发起远程调用</li>
+</ul>
+<p>当服务提供者的实例宕机或者启动新实例时，调用者如何得知呢？</p>
+<ul>
+<li>服务提供者会定期向注册中心发送请求，报告自己的健康状态（心跳）</li>
+<li>当注册中心长时间收不到提供者的心跳时，会认为该实例宕机，从而将其从其服务的实例列表中剔除</li>
+<li>当服务有新的实例启动时，会发送注册服务的请求，其信息会被记录在注册中心的服务实例列表</li>
+<li>当注册中心的服务实例列表更新时，会主动通知微服务，更新本地服务列表</li>
+</ul>
+<p><strong>注意：</strong>微服务通常会维护一个本地缓存的服务列表，用于优化服务调用的性能（避免每次调用时都从注册中心获取服务列表）。当注册中心通知微服务服务列表变更时，微服务会根据收到的增量更新，及时刷新它们本地缓存的服务列表。这样，在下一次进行跨服务调用时，微服务可以确保使用的是最新的服务实例信息。</p>
+<h3 id="Nacos注册中心"><a href="#Nacos注册中心" class="headerlink" title="Nacos注册中心"></a>Nacos注册中心</h3><p>目前开源的注册中心框架有很多，国内比较常见的有：</p>
+<ul>
+<li>Eureka：Netflix公司出品，目前被集成在SpringCloud当中，一般用于Java应用</li>
+<li>Nacos：Alibaba公司出品，目前被集成在SpringCloudAlibaba中，一般用于Java应用</li>
+<li>Consul：HashiCorp公司出品，目前集成在SpringCloud中，不限制微服务语言</li>
+</ul>
+<p>以上几种注册中心都遵循SpringCloud中的API规范，因此在业务开发使用上没有太大差异。Nacos是国内产品，中文文档比较丰富，而且同时具备<strong>配置管理</strong>功能。</p>
+<h4 id="部署步骤"><a href="#部署步骤" class="headerlink" title="部署步骤"></a>部署步骤</h4><p>这里是基于docker部署nacos</p>
+<p>1.将nacos的sql文件导入到docker的mysql容器中</p>
+<p>2.在<code>nacos/custom.env</code>文件中，有一个MYSQL_SERVICE_HOST也就是mysql地址，需要修改为你自己的虚拟机IP地址</p>
+<p>3.将<code>nacos</code>目录上传至虚拟机的<code>/root</code>目录。</p>
+<p>4.进入root目录，然后执行下面的docker命令：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run <span class="literal">-d</span> \</span><br><span class="line"><span class="literal">--name</span> nacos \</span><br><span class="line"><span class="literal">--env-file</span> ./nacos/custom.env \</span><br><span class="line"><span class="literal">-p</span> <span class="number">8848</span>:<span class="number">8848</span> \</span><br><span class="line"><span class="literal">-p</span> <span class="number">9848</span>:<span class="number">9848</span> \</span><br><span class="line"><span class="literal">-p</span> <span class="number">9849</span>:<span class="number">9849</span> \</span><br><span class="line"><span class="literal">--restart</span>=always \</span><br><span class="line">nacos/nacos<span class="literal">-server</span>:v2</span><br></pre></td></tr></table></figure>
+
+
+
+<p>启动完成后，访问下面地址：<a target="_blank" rel="noopener" href="http://192.168.10.101:8848/nacos%EF%BC%8C%E6%B3%A8%E6%84%8F%E5%B0%86%60192.168.10.101%60%E6%9B%BF%E6%8D%A2%E4%B8%BA%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E8%99%9A%E6%8B%9F%E6%9C%BAIP%E5%9C%B0%E5%9D%80%E3%80%82">http://192.168.10.101:8848/nacos，注意将`192.168.10.101`替换为你自己的虚拟机IP地址。</a></p>
+<p>首次访问会跳转到登录页，<strong>账号密码都是nacos</strong></p>
+<h4 id="服务注册"><a href="#服务注册" class="headerlink" title="服务注册"></a>服务注册</h4><p>接下来，我们把<code>item-service</code>注册到Nacos，步骤如下：</p>
+<ul>
+<li>引入依赖</li>
+<li>配置Nacos地址</li>
+<li>重启</li>
+</ul>
+<p><strong>1.添加依赖</strong></p>
+<p>在<code>item-service</code>的<code>pom.xml</code>中添加依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--nacos 服务注册发现--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>2.配置Nacos</strong></p>
+<p>在<code>item-service</code>的<code>application.yml</code>中添加nacos地址配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">item-service</span> <span class="comment"># 服务名称</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">192.168</span><span class="number">.10</span><span class="number">.101</span><span class="string">:8848</span> <span class="comment"># nacos地址</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3.启动服务实例</strong></p>
+<p>为了测试一个服务多个实例的情况，我们再配置一个<code>item-service</code>的部署实例：</p>
+<p><img src="/../images/image-20250410120015322.png" alt="image-20250410120015322"></p>
+<p>然后配置启动项，注意重命名并且配置新的端口，避免冲突：</p>
+<p><img src="/../images/image-20250410120036519.png" alt="image-20250410120036519"></p>
+<p>重启<code>item-service</code>的两个实例：</p>
+<p>访问nacos控制台，可以发现服务注册成功：</p>
+<p><img src="/../images/image-20250410202356900.png" alt="image-20250410202356900"></p>
+<p>点击详情，可以查看到<code>item-service</code>服务的两个实例信息：</p>
+<p><img src="/../images/image-20250410120125855.png" alt="image-20250410120125855"></p>
+<h4 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h4><p>服务的消费者要去nacos订阅服务，这个过程就是服务发现，步骤如下：</p>
+<ul>
+<li>引入依赖</li>
+<li>配置Nacos地址</li>
+<li>发现并调用服务</li>
+</ul>
+<p><strong>1.引入依赖</strong></p>
+<p>服务发现除了要引入nacos依赖以外，由于还需要负载均衡，因此要引入SpringCloud提供的LoadBalancer依赖。</p>
+<p>我们在<code>cart-service</code>中的<code>pom.xml</code>中添加下面的依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--nacos 服务注册发现--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现，这里Nacos的依赖于服务注册时一致，这个依赖中同时包含了服务注册和发现的功能。因为任何一个微服务都可以调用别人，也可以被别人调用，即可以是调用者，也可以是提供者。</p>
+<p>因此，等一会儿<code>cart-service</code>启动，同样会注册到Nacos</p>
+<p><strong>2.配置Nacos地址</strong></p>
+<p>在<code>cart-service</code>的<code>application.yml</code>中添加nacos地址配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">192.168</span><span class="number">.150</span><span class="number">.101</span><span class="string">:8848</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3.发现并调用服务</strong></p>
+<p>接下来，服务调用者<code>cart-service</code>就可以去订阅<code>item-service</code>服务了。不过item-service有多个实例，而真正发起调用时只需要知道一个实例的地址。</p>
+<p>因此，服务调用者必须利用负载均衡的算法，从多个实例中挑选一个去访问。常见的负载均衡算法有：</p>
+<ul>
+<li>随机</li>
+<li>轮询</li>
+<li>IP的hash</li>
+<li>最近最少访问</li>
+<li>…</li>
+</ul>
+<p>这里我们可以选择最简单的随机负载均衡。</p>
+<p>另外，服务发现需要用到一个工具，DiscoveryClient，SpringCloud已经帮我们自动装配，我们可以直接注入使用：</p>
+<p><img src="/../images/image-20250410121727177.png" alt="image-20250410121727177"></p>
+<p>接下来，我们就可以对原来的远程调用做修改了，之前调用时我们需要写死服务提供者的IP和端口：</p>
+<p>但现在不需要了，我们通过DiscoveryClient发现服务实例列表，然后通过负载均衡算法，选择一个实例去调用：</p>
+<p><img src="/../images/image-20250410121817031.png" alt="image-20250410121817031"></p>
+<h2 id="3-OpenFeign"><a href="#3-OpenFeign" class="headerlink" title="3.OpenFeign"></a>3.OpenFeign</h2><p><img src="/../images/image-20250410204717449.png" alt="image-20250410204717449"></p>
+<p>虽然上面我们可以使用RestTemplate发起远程调用，但还是有些复杂了，可以用更简单的方式实现，那就是OpenFeign。</p>
+<h3 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h3><p>以cart-service为例</p>
+<h4 id="1-引入依赖"><a href="#1-引入依赖" class="headerlink" title="1.引入依赖"></a>1.引入依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--openFeign--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--负载均衡器--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-给启动类添加-EnableFeignClients注解"><a href="#2-给启动类添加-EnableFeignClients注解" class="headerlink" title="2.给启动类添加@EnableFeignClients注解"></a>2.给启动类添加@EnableFeignClients注解</h4><p><img src="/../images/image-20250410203057493.png" alt="image-20250410203057493"></p>
+<h4 id="3-新建一个ItemClient接口"><a href="#3-新建一个ItemClient接口" class="headerlink" title="3.新建一个ItemClient接口"></a>3.新建一个ItemClient接口</h4><p><img src="/../images/image-20250410203222224.png" alt="image-20250410203222224"></p>
+<p>参考所需的item微服务下的api信息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ApiOperation(&quot;根据id批量查询商品&quot;)</span></span><br><span class="line"><span class="meta">@GetMapping</span></span><br><span class="line"><span class="keyword">public</span> List&lt;ItemDTO&gt; <span class="title function_">queryItemByIds</span><span class="params">(<span class="meta">@RequestParam(&quot;ids&quot;)</span> List&lt;Long&gt; ids)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> itemService.queryItemByIds(ids);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>依照上面请求方式注解和请求参数，添加信息到ItemClient中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(&quot;item-service&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ItemClient</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/items&quot;)</span></span><br><span class="line">    List&lt;ItemDTO&gt; <span class="title function_">queryItemByIds</span><span class="params">(<span class="meta">@RequestParam(&quot;ids&quot;)</span> List&lt;Long&gt; ids)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里只需要声明接口，无需实现方法。接口中的几个关键信息：</p>
+<ul>
+<li><code>@FeignClient(&quot;item-service&quot;)</code> ：声明服务名称</li>
+<li><code>@GetMapping</code> ：声明请求方式</li>
+<li><code>@GetMapping(&quot;/items&quot;)</code> ：声明请求路径</li>
+<li><code>@RequestParam(&quot;ids&quot;) Collection&lt;Long&gt; ids</code> ：声明请求参数</li>
+<li><code>List&lt;ItemDTO&gt;</code> ：返回值类型</li>
+</ul>
+<p><strong>注意</strong>，这里@GetMapping(“&#x2F;items”)中的items是对应controller的RequestMapping中的参数，别忘了加上。</p>
+<p><img src="/../images/image-20250410203800827.png" alt="image-20250410203800827"></p>
+<p>还有，别忘了在启动类里添加需要的client</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(clients = &#123;UserClient.class, OrderClient.class&#125;, defaultConfiguration = DefaultFeignConfig.class)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-使用OpenFeign"><a href="#4-使用OpenFeign" class="headerlink" title="4.使用OpenFeign"></a>4.使用OpenFeign</h4><p>在CartServiceImpl中注入ItemClient后直接调用对应的方法即可</p>
+<p><img src="/../images/image-20250410210633955.png" alt="image-20250410210633955"></p>
+<p>如上所示，大大减少了代码的复杂度。</p>
+<p>feign替我们完成了服务拉取、负载均衡、发送http请求的所有工作，是不是看起来优雅多了。</p>
+<p>而且，这里我们不再需要RestTemplate了，还省去了RestTemplate的注册。</p>
+<h3 id="连接池"><a href="#连接池" class="headerlink" title="连接池"></a>连接池</h3><p>Feign底层发起http请求时，依赖于其他的框架。其底层支持的http客户端实现包括：</p>
+<ul>
+<li>HttpURLConnection: 默认实现，不支持连接池</li>
+<li>Apache HttpClient：支持连接池</li>
+<li>OKHttp：支持连接池</li>
+</ul>
+<p>所以我们需要使用带有连接池的客户端来代替默认的HttpURLConnection。下面以OKHttp为例。</p>
+<p>提问：这里的连接池是指什么？</p>
+<p>连接池指的是一组预先创建的 HTTP 连接，这些连接可以被重复使用，而不是每次请求都创建一个新的连接。</p>
+<p>在 Feign 中，不同的 HTTP 客户端实现对连接池的支持有所不同：</p>
+<p>HttpURLConnection：</p>
+<p>这是 Java 的默认 HTTP 客户端实现，不支持连接池。每次请求都会创建一个新的连接，请求完成后连接会被关闭。这种方式在高并发场景下性能较差。</p>
+<p>Apache HttpClient：</p>
+<p>这是一个功能强大的 HTTP 客户端库，支持连接池。通过配置连接池，可以复用连接，提高性能。</p>
+<p>OKHttp：</p>
+<p>这是另一个流行的 HTTP 客户端库，也支持连接池。OKHttp 的连接池实现高效且易于配置，适合在高并发场景下使用</p>
+<h4 id="1-引入依赖-1"><a href="#1-引入依赖-1" class="headerlink" title="1.引入依赖"></a>1.引入依赖</h4><p>在<code>cart-service</code>的<code>pom.xml</code>中引入依赖：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--OK http 的依赖 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.openfeign<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>feign-okhttp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-开启连接池"><a href="#2-开启连接池" class="headerlink" title="2.开启连接池"></a>2.开启连接池</h4><p>在<code>cart-service</code>的<code>application.yml</code>配置文件中开启Feign的连接池功能：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">okhttp:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span>  <span class="comment">#启用OKHttp连接池</span></span><br></pre></td></tr></table></figure>
+
+<p>重启服务后，连接池就生效了</p>
+<h3 id="公共module抽取"><a href="#公共module抽取" class="headerlink" title="公共module抽取"></a>公共module抽取</h3><p>问题引入：当前项目中除了购物车模块需要远程调用商品模块，下单模块也需要，此时，又需要在下单模块里创建ItemClient接口，这不是就相当于<strong>重复编码</strong>了吗。</p>
+<p>避免重复编码的方法就是抽取，抽取一共有以下两种方法：</p>
+<p>方法一：抽取到微服务之外的公共module</p>
+<p>方法二：每个微服务自己抽取一个module(模块可以被其他服务引入)</p>
+<p>两种方法的项目结构图如下所示</p>
+<p><img src="/../images/image-20250411190709970.png" alt="image-20250411190709970"></p>
+<p>方法1抽取更加简单，工程结构也比较清晰，但缺点是整个项目耦合度偏高。</p>
+<p>方法2抽取相对麻烦，工程结构相对更复杂，但服务之间耦合度降低。</p>
+<p>因为当前item-service已经创建好了（已经是服务启动类了），无法继续创建模块。所以这里我们采用方法一</p>
+<p>针对方法2的思路理清：</p>
+<p>方法2本质就是在每个微服务平级旁边再加两个模块，专门用于给其他模块调用的。</p>
+<p>针对方法1的耦合度高理解：</p>
+<p>方法1因为是一个公共模块，所以所有需要远程调用的服务都需要引入该依赖，导致这一个公共模块包含了很多针<strong>对于某一个调用者模块来说多余的dto类和client接口</strong>。</p>
+<h4 id="1-创建模块，导入依赖"><a href="#1-创建模块，导入依赖" class="headerlink" title="1.创建模块，导入依赖"></a>1.创建模块，导入依赖</h4><p>这里我已经创建好了，注意以hmall为父工程</p>
+<p><img src="/../images/image-20250411191431781.png" alt="image-20250411191431781"></p>
+<p>创建好模块后导入如下依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--open feign--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-openfeign<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- load balancer--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- swagger 注解依赖 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.swagger<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>swagger-annotations<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.6.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后，把cart-service中的ItemDTO和ItemClient复制到当前模块中</p>
+<p><img src="/../images/image-20250411191826445.png" alt="image-20250411191826445"></p>
+<p>现在，任何微服务要调用<code>item-service</code>中的接口，只需要引入<code>hm-api</code>模块依赖即可，无需自己编写Feign客户端了。此时，任何微服务都无需在自己包下面创建所需的其他服务的dto和client了。</p>
+<h4 id="2-启动报错"><a href="#2-启动报错" class="headerlink" title="2.启动报错"></a>2.启动报错</h4><p>此时我们删除cart-service中的client和dto，并引入这个公共模块，会发现启动后报错了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.ldy<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hm-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/image-20250411192641481.png" alt="image-20250411192641481"></p>
+<p>这里因为<code>ItemClient</code>现在定义到了<code>com.hmall.api.client</code>包下，而cart-service的启动类定义在<code>com.hmall.cart</code>包下，扫描不到<code>ItemClient</code>，所以报错了。</p>
+<p>注意：@SpringBootApplication这个注解中包含了@ComponentScan, 这个注解会扫描当前包(com.hmall.cart)中的文件。</p>
+<h4 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3.解决方法"></a>3.解决方法</h4><p>解决方法有两种,都是配置启动类中的**@EnableFeignClients**注解参数：</p>
+<p>1.在@EnableFeignClients中添加basePackages参数为client所在位置</p>
+<p><img src="/../images/image-20250411192959123.png" alt="image-20250411192959123"></p>
+<p>2.在@EnableFeignClients中添加clients参数为所需的client.class</p>
+<p><img src="/../images/image-20250411193127752.png" alt="image-20250411193127752"></p>
+<h3 id="日志配置"><a href="#日志配置" class="headerlink" title="日志配置"></a>日志配置</h3><p>OpenFeign只会在FeignClient所在包的日志级别为<strong>DEBUG</strong>时（这里指的是springboot项目的日志级别，也就是说只有当前所在的包的日志级别为DEBUG时，feign才有可能输出日志），才会输出日志（feign的日志）。而且其日志级别有4级：</p>
+<ul>
+<li><strong>NONE</strong>：不记录任何日志信息，这是默认值。</li>
+<li><strong>BASIC</strong>：仅记录请求的方法，URL以及响应状态码和执行时间</li>
+<li><strong>HEADERS</strong>：在BASIC的基础上，额外记录了请求和响应的头信息</li>
+<li><strong>FULL</strong>：记录所有请求和响应的明细，包括头信息、请求体、元数据。</li>
+</ul>
+<p>Openfegin默认的日志级别是None,所以我们看不到任何连接相关的日志信息</p>
+<p>注意：一般也不开启feign的日志配置，只有在需要调试feign的时候才开启日志，因为日志输出的内容有很多，输出时会影响性能。</p>
+<h4 id="1-定义日志级别"><a href="#1-定义日志级别" class="headerlink" title="1.定义日志级别"></a>1.定义日志级别</h4><p>在hm-api模块下新建一个配置类，定义Feign的日志级别：</p>
+<p><img src="/../images/image-20250411194425248.png" alt="image-20250411194425248"></p>
+<p>注意不要导错包了，是<code>feign.Logger</code>这个包。</p>
+<h4 id="2-配置"><a href="#2-配置" class="headerlink" title="2.配置"></a>2.配置</h4><p>尽管我们将Logger.Level.FULL这个日志级别引入了容器，但我们还需要配置这个日志级别才能成功输出日志。而配置方式有两种。</p>
+<ul>
+<li><strong>局部</strong>生效：在某个<code>FeignClient</code>中配置，只对当前<code>FeignClient</code>生效</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(value = &quot;item-service&quot;, configuration = FeignConfig.class.class)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>全局</strong>生效：在<code>@EnableFeignClients</code>（启动类上）中配置，针对所有<code>FeignClient</code>生效。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(defaultConfiguration = FeignConfig.class.class)</span></span><br></pre></td></tr></table></figure>
+
+<p>日志格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">17:35:32:148 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] ---&gt; GET http://item-service/items?ids=100000006163 HTTP/1.1</span><br><span class="line">17:35:32:148 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] ---&gt; END HTTP (0-byte body)</span><br><span class="line">17:35:32:278 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] &lt;--- HTTP/1.1 200  (127ms)</span><br><span class="line">17:35:32:279 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] connection: keep-alive</span><br><span class="line">17:35:32:279 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] content-type: application/json</span><br><span class="line">17:35:32:279 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] date: Fri, 26 May 2023 09:35:32 GMT</span><br><span class="line">17:35:32:279 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] keep-alive: timeout=60</span><br><span class="line">17:35:32:279 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] transfer-encoding: chunked</span><br><span class="line">17:35:32:279 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] </span><br><span class="line">17:35:32:280 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] [&#123;&quot;id&quot;:100000006163,&quot;name&quot;:&quot;巴布豆(BOBDOG)柔薄悦动婴儿拉拉裤XXL码80片(15kg以上)&quot;,&quot;price&quot;:67100,&quot;stock&quot;:10000,&quot;image&quot;:&quot;https://m.360buyimg.com/mobilecms/s720x720_jfs/t23998/350/2363990466/222391/a6e9581d/5b7cba5bN0c18fb4f.jpg!q70.jpg.webp&quot;,&quot;category&quot;:&quot;拉拉裤&quot;,&quot;brand&quot;:&quot;巴布豆&quot;,&quot;spec&quot;:&quot;&#123;&#125;&quot;,&quot;sold&quot;:11,&quot;commentCount&quot;:33343434,&quot;isAD&quot;:false,&quot;status&quot;:2&#125;]</span><br><span class="line">17:35:32:281 DEBUG 18620 --- [nio-8082-exec-1] com.hmall.api.client.ItemClient          : [ItemClient#queryItemByIds] &lt;--- END HTTP (369-byte body)</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>nacos就是一个微服务注册中心，解决了<strong>路由写死</strong>问题。</p>
+<p>而openFeign是一个依赖,利用到了nacos中注册的微服务,方便我们进行远程调用,此外也通过引入负载均衡器依赖实现负载均衡。</p>
+<h1 id="二、网关"><a href="#二、网关" class="headerlink" title="二、网关"></a>二、网关</h1><h2 id="1-网关路由"><a href="#1-网关路由" class="headerlink" title="1.网关路由"></a>1.网关路由</h2><p>网关顾名思义，就是指<strong>网络的关口</strong>。数据在网络间传输时，从一个网络传输到另一个网络时，需要经过网关来进行安全校验，并做数据的路由和转发。</p>
+<p><img src="/../images/image-20250413005456114.png" alt="image-20250413005456114"></p>
+<p>所以，有了网关之后，前端的请求就不能直接访问相应的微服务，而是需要先请求网关。</p>
+<ul>
+<li>网关可以做安全控制，例如登录身份校验，校验通过才放行</li>
+<li>通过身份认证后，会根据请求判断应该访问的是哪个微服务，并把请求转发过去。</li>
+</ul>
+<p><img src="/../images/image-20250413010110735.png" alt="image-20250413010110735"></p>
+<p>在SpringCloud当中，提供了两种网关实现方案：</p>
+<ul>
+<li>Netflix Zuul：早期实现，目前已经淘汰</li>
+<li>SpringCloudGateway：基于Spring的WebFlux技术，完全支持响应式编程，吞吐能力更强</li>
+</ul>
+<p>这里以SpringCloudGateway为例。</p>
+<h3 id="1-快速入门"><a href="#1-快速入门" class="headerlink" title="1.快速入门"></a>1.快速入门</h3><p>由于网关本身也是个独立的微服务，所以需要新创建一个模块实现功能。大概步骤如下：</p>
+<ul>
+<li>创建网关微服务</li>
+<li>引入SpringCloudGateway、NacosDiscovery依赖</li>
+<li>编写启动类</li>
+<li>配置网关路由</li>
+</ul>
+<p>1.创建网关模块</p>
+<p><img src="/../images/image-20250413010441595.png" alt="image-20250413010441595"></p>
+<p>2.引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--common--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.heima<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hm-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--网关--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-gateway<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--nacos discovery--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-discovery<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--负载均衡--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-loadbalancer<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>$&#123;project.artifactId&#125;<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>3.新建启动类</p>
+<p><img src="/../images/image-20250413010713403.png" alt="image-20250413010713403"></p>
+<p>4.配置网关路由</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">gateway</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">192.168</span><span class="number">.10</span><span class="number">.101</span><span class="string">:8848</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">item</span> <span class="comment"># 路由规则id，自定义，唯一</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://item-service</span> <span class="comment"># 路由的目标服务，lb代表负载均衡，会从注册中心拉取服务列表</span></span><br><span class="line">          <span class="attr">predicates:</span> <span class="comment"># 路由断言，判断当前请求是否符合当前规则，符合则路由到目标服务</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/items/**,/search/**</span> <span class="comment"># 这里是以请求路径作为判断规则</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">cart</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://cart-service</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/carts/**</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">user</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://user-service</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/users/**,/addresses/**</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">trade</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://trade-service</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/orders/**</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">pay</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://pay-service</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/pay-orders/**</span></span><br></pre></td></tr></table></figure>
+
+<p>5.测试</p>
+<p>启动网关微服务(8080端口)和item微服务(8081端口)，并访问如下地址</p>
+<p><a target="_blank" rel="noopener" href="http://localhost:8080/items/page?pageNo=1&pageSize=1">localhost:8080&#x2F;items&#x2F;page?pageNo&#x3D;1&amp;pageSize&#x3D;1</a></p>
+<p><img src="/../images/image-20250413011111028.png" alt="image-20250413011111028"></p>
+<p>可以看到，成功访问到了item微服务的接口。</p>
+<p>地址转换规则如下</p>
+<p><a target="_blank" rel="noopener" href="http://localhost:8080/items/page?pageNo=1&pageSize=1">localhost:8080&#x2F;items&#x2F;page?pageNo&#x3D;1&amp;pageSize&#x3D;1</a> &#x3D;》 <a target="_blank" rel="noopener" href="http://localhost:8081/items/page?pageNo=1&pageSize=1">localhost:8081&#x2F;items&#x2F;page?pageNo&#x3D;1&amp;pageSize&#x3D;1</a></p>
+<p>可以看到，仅仅是端口号不同，访问的到的内容却是一致的。</p>
+<p>主要是因为我们配置文件中的如下内容</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">id:</span> <span class="string">item</span> <span class="comment"># 路由规则id，自定义，唯一</span></span><br><span class="line">  <span class="attr">uri:</span> <span class="string">lb://item-service</span> <span class="comment"># 路由的目标服务，lb代表负载均衡，会从注册中心拉取服务列表</span></span><br><span class="line">  <span class="attr">predicates:</span> <span class="comment"># 路由断言，判断当前请求是否符合当前规则，符合则路由到目标服务</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">Path=/items/**,/search/**</span> <span class="comment"># 这里是以请求路径作为判断规则</span></span><br></pre></td></tr></table></figure>
+
+<p>其中，id只是一个标识符，无实际意义。</p>
+<h3 id="2-路由过滤"><a href="#2-路由过滤" class="headerlink" title="2.路由过滤"></a>2.路由过滤</h3><p>路由规则的定义语法如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">item</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://item-service</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/items/**,/search/**</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以查询对应的配置类是如何定义配置信息的</p>
+<p><img src="/../images/image-20250413012112284.png" alt="image-20250413012112284"></p>
+<p><img src="/../images/image-20250413012133585.png" alt="image-20250413012133585"></p>
+<p><img src="/../images/image-20250413012242147.png" alt="image-20250413012242147"></p>
+<p>其中，四个属性的详细意义如下</p>
+<ul>
+<li><code>id</code>：路由的唯一标示</li>
+<li><code>predicates</code>：路由断言，其实就是匹配条件</li>
+<li><code>filters</code>：路由过滤条件</li>
+<li><code>uri</code>：路由目标地址，<code>lb://</code>代表负载均衡，从注册中心获取目标微服务的实例列表，并且负载均衡选择一个访问。</li>
+</ul>
+<p>对于<code>predicates</code>，也就是路由断言。SpringCloudGateway中支持的断言类型有很多：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>名称</strong></th>
+<th align="left"><strong>说明</strong></th>
+<th align="left"><strong>示例</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">After</td>
+<td align="left">是某个时间点后的请求</td>
+<td align="left">- After&#x3D;2037-01-20T17:42:47.789-07:00[America&#x2F;Denver]</td>
+</tr>
+<tr>
+<td align="left">Before</td>
+<td align="left">是某个时间点之前的请求</td>
+<td align="left">- Before&#x3D;2031-04-13T15:14:47.433+08:00[Asia&#x2F;Shanghai]</td>
+</tr>
+<tr>
+<td align="left">Between</td>
+<td align="left">是某两个时间点之前的请求</td>
+<td align="left">- Between&#x3D;2037-01-20T17:42:47.789-07:00[America&#x2F;Denver], 2037-01-21T17:42:47.789-07:00[America&#x2F;Denver]</td>
+</tr>
+<tr>
+<td align="left">Cookie</td>
+<td align="left">请求必须包含某些cookie</td>
+<td align="left">- Cookie&#x3D;chocolate, ch.p</td>
+</tr>
+<tr>
+<td align="left">Header</td>
+<td align="left">请求必须包含某些header</td>
+<td align="left">- Header&#x3D;X-Request-Id, \d+</td>
+</tr>
+<tr>
+<td align="left">Host</td>
+<td align="left">请求必须是访问某个host（域名）</td>
+<td align="left">- Host&#x3D;<strong>.somehost.org,</strong>.anotherhost.org</td>
+</tr>
+<tr>
+<td align="left">Method</td>
+<td align="left">请求方式必须是指定方式</td>
+<td align="left">- Method&#x3D;GET,POST</td>
+</tr>
+<tr>
+<td align="left">Path</td>
+<td align="left">请求路径必须符合指定规则</td>
+<td align="left">- Path&#x3D;&#x2F;red&#x2F;{segment},&#x2F;blue&#x2F;**</td>
+</tr>
+<tr>
+<td align="left">Query</td>
+<td align="left">请求参数必须包含指定参数</td>
+<td align="left">- Query&#x3D;name, Jack或者- Query&#x3D;name</td>
+</tr>
+<tr>
+<td align="left">RemoteAddr</td>
+<td align="left">请求者的ip必须是指定范围</td>
+<td align="left">- RemoteAddr&#x3D;192.168.1.1&#x2F;24</td>
+</tr>
+<tr>
+<td align="left">weight</td>
+<td align="left">权重处理</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h2 id="2-网关登录校验"><a href="#2-网关登录校验" class="headerlink" title="2.网关登录校验"></a>2.网关登录校验</h2><p>在单体架构项目里，对于每次请求，我们只需要进行一次用户信息校验，把用户信息存入ThreadLocal中即可实现所有服务在当前线程中均可访问用户信息。而在微服务架构下，微服务之间没有共享数据，意味着每个微服务都要进行登录校验。但假设当前微服务需要远程调用其他微服务，那么势必要将校验信息再次传递过去，类似：微服务1获取token -&gt; 微服务1校验通过，保存token -&gt; 远程调用，传递token -&gt;  微服务2校验通过，保存token -&gt; 远程调用….. 。这么看，还需要保存token,并传递，显然不优雅。</p>
+<h3 id="1-鉴权思路分析"><a href="#1-鉴权思路分析" class="headerlink" title="1.鉴权思路分析"></a>1.鉴权思路分析</h3><p>我们的登录是基于JWT来实现的，校验JWT的算法复杂，而且需要用到秘钥。如果每个微服务都去做登录校验，这就存在着两大问题：</p>
+<ul>
+<li>每个微服务都需要知道JWT的秘钥，不安全</li>
+<li>每个微服务重复编写登录校验代码、权限校验代码，麻烦</li>
+</ul>
+<p>既然网关是所有微服务的入口，一切请求都需要先经过网关。我们完全可以把登录校验的工作放到网关去做，这样之前说的问题就解决了：</p>
+<ul>
+<li>只需要在网关和用户服务保存秘钥</li>
+<li>只需要在网关开发登录校验功能</li>
+</ul>
+<p>此时，登录校验流程如图</p>
+<p><img src="/../images/image-20250413014653831.png" alt="image-20250413014653831"></p>
+<p>不过，这里存在几个问题：</p>
+<ul>
+<li>网关路由是配置的，请求转发是Gateway内部代码，我们如何在转发之前做登录校验？</li>
+<li>网关校验JWT之后，如何将用户信息传递给微服务？</li>
+<li>微服务之间也会相互调用，这种调用不经过网关，又该如何传递用户信息？</li>
+</ul>
+<p>这些问题在下面内容会解决。</p>
+<h3 id="2-网关过滤器"><a href="#2-网关过滤器" class="headerlink" title="2.网关过滤器"></a>2.网关过滤器</h3><p>登录校验必须在请求转发到微服务之前做，否则就失去了意义。而网关的请求转发是<code>Gateway</code>内部代码实现的，要想在请求转发之前做登录校验，就必须了解<code>Gateway</code>内部工作的基本原理。</p>
+<p><img src="/../images/image-20250413234231290.png" alt="image-20250413234231290"></p>
+<p>如图所示：</p>
+<ol>
+<li>客户端请求进入网关后由<code>HandlerMapping</code>对请求做判断，找到与当前请求匹配的路由规则（**<code>Route</code>**），然后将请求交给<code>WebHandler</code>去处理。</li>
+<li><code>WebHandler</code>则会加载当前路由下需要执行的过滤器链（**<code>Filter chain</code><strong>），然后按照顺序逐一执行过滤器（后面称为</strong><code>Filter</code>**）。</li>
+<li>图中<code>Filter</code>被虚线分为左右两部分，是因为<code>Filter</code>内部的逻辑分为<code>pre</code>和<code>post</code>两部分，分别会在请求路由到微服务<strong>之前</strong>和<strong>之后</strong>被执行。之前指的是在请求发送到微服务之前处理，而之后指的是对微服务响应的信息进行处理。</li>
+<li>只有所有<code>Filter</code>的<code>pre</code>逻辑都依次顺序执行通过后，请求才会被路由到微服务。</li>
+<li>微服务返回结果后，再倒序执行<code>Filter</code>的<code>post</code>逻辑。</li>
+<li>最终把响应结果返回。</li>
+</ol>
+<p>如图中所示，最终请求转发是有一个名为<code>NettyRoutingFilter</code>的过滤器来执行的，而且这个过滤器是整个过滤器链中顺序最靠后的一个。如果我们能够定义一个过滤器，在其中实现登录校验逻辑，并且将过滤器执行顺序定义到<code>NettyRoutingFilter</code>之前，这就符合我们的需求了！</p>
+<p>那么，该如何实现一个网关过滤器呢？</p>
+<p>网关过滤器链中的过滤器有两种：</p>
+<ul>
+<li>**<code>GatewayFilter</code>**：路由过滤器，作用范围比较灵活，可以是任意指定的路由<code>Route</code>. </li>
+<li>**<code>GlobalFilter</code>**：全局过滤器，作用范围是所有路由，不可配置。</li>
+</ul>
+<h4 id="GatewayFilter路由过滤器"><a href="#GatewayFilter路由过滤器" class="headerlink" title="GatewayFilter路由过滤器"></a>GatewayFilter路由过滤器</h4><p><code>Gateway</code>内置的<code>GatewayFilter</code>过滤器使用起来非常简单，无需编码，只要在yaml文件中简单配置即可。而且其作用范围也很灵活，配置在哪个<code>Route</code>下，就作用于哪个<code>Route</code>.</p>
+<p>例如，有一个过滤器叫做<code>AddRequestHeaderGatewayFilterFacotry</code>，顾明思议，就是添加请求头的过滤器，可以给请求添加一个请求头并传递到下游微服务。</p>
+<p>使用的使用只需要在application.yaml中这样配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">item</span> <span class="comment"># 路由规则id，自定义，唯一</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://item-service</span> <span class="comment"># 路由的目标服务，lb代表负载均衡，会从注册中心拉取服务列表</span></span><br><span class="line">          <span class="attr">predicates:</span> <span class="comment"># 路由断言，判断当前请求是否符合当前规则，符合则路由到目标服务</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/items/**,/search/**</span> <span class="comment"># 这里是以请求路径作为判断规则</span></span><br><span class="line">          <span class="attr">filters:</span> </span><br><span class="line">            <span class="bullet">-</span> <span class="string">AddRequestHeader=key,</span> <span class="string">value</span> <span class="comment"># 逗号之前是请求头的key，逗号之后是value</span></span><br></pre></td></tr></table></figure>
+
+<p>如果想要让过滤器作用于所有的路由，则可以这样配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">default-filters:</span> <span class="comment"># default-filters下的过滤器可以作用于所有路由</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">AddRequestHeader=key,</span> <span class="string">value</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">test_route</span></span><br><span class="line">        <span class="attr">uri:</span> <span class="string">lb://test-service</span></span><br><span class="line">        <span class="attr">predicates:</span></span><br><span class="line">          <span class="string">-Path=/test/**</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们需要先提一下，filters使用的<code>AddRequestHeader=key, value</code>中，AddRequestHeader是AddRequestHeaderGatewayFilterFacotry去掉GateWayFilterFactory后缀的结果。使用其他过滤器也要去掉相同的后缀。</p>
+<h4 id="自定义过滤器GatewayFilter"><a href="#自定义过滤器GatewayFilter" class="headerlink" title="自定义过滤器GatewayFilter"></a>自定义过滤器GatewayFilter</h4><p>自定义<code>GatewayFilter</code>不是直接实现<code>GatewayFilter</code>，而是继承<code>AbstractGatewayFilterFactory</code>。最简单的方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PrintAnyGatewayFilterFactory</span> <span class="keyword">extends</span> <span class="title class_">AbstractGatewayFilterFactory</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> GatewayFilter <span class="title function_">apply</span><span class="params">(Object config)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">GatewayFilter</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">                <span class="comment">//获取请求</span></span><br><span class="line">                <span class="type">ServerHttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> exchange.getRequest();</span><br><span class="line">                <span class="comment">//处理信息略</span></span><br><span class="line">                System.out.println(<span class="string">&quot;过滤器执行了&quot;</span>);</span><br><span class="line">                <span class="comment">//放行</span></span><br><span class="line">                <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：该类的名称一定要以<code>GatewayFilterFactory</code>为后缀！</p>
+<p>然后在yaml配置中这样使用：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">default-filters:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">PrintAny</span> <span class="comment"># 此处直接以自定义的GatewayFilterFactory类名称前缀类声明过滤器</span></span><br></pre></td></tr></table></figure>
+
+<p>另外，这种过滤器还可以支持动态配置参数，不过实现起来比较复杂，示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PrintAnyGatewayFilterFactory</span> <span class="comment">// 父类泛型是内部类的Config类型</span></span><br><span class="line">                <span class="keyword">extends</span> <span class="title class_">AbstractGatewayFilterFactory</span>&lt;PrintAnyGatewayFilterFactory.Config&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> GatewayFilter <span class="title function_">apply</span><span class="params">(Config config)</span> &#123;</span><br><span class="line">        <span class="comment">// OrderedGatewayFilter是GatewayFilter的子类，包含两个参数：</span></span><br><span class="line">        <span class="comment">// - GatewayFilter：过滤器</span></span><br><span class="line">        <span class="comment">// - int order值：值越小，过滤器执行优先级越高</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">OrderedGatewayFilter</span>(<span class="keyword">new</span> <span class="title class_">GatewayFilter</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">                <span class="comment">// 获取config值</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> config.getA();</span><br><span class="line">                <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> config.getB();</span><br><span class="line">                <span class="type">String</span> <span class="variable">c</span> <span class="operator">=</span> config.getC();</span><br><span class="line">                <span class="comment">// 编写过滤器逻辑</span></span><br><span class="line">                System.out.println(<span class="string">&quot;a = &quot;</span> + a);</span><br><span class="line">                System.out.println(<span class="string">&quot;b = &quot;</span> + b);</span><br><span class="line">                System.out.println(<span class="string">&quot;c = &quot;</span> + c);</span><br><span class="line">                <span class="comment">// 放行</span></span><br><span class="line">                <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 自定义配置属性，成员变量名称很重要，下面会用到</span></span><br><span class="line">    <span class="meta">@Data</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Config</span>&#123;</span><br><span class="line">        <span class="keyword">private</span> String a;</span><br><span class="line">        <span class="keyword">private</span> String b;</span><br><span class="line">        <span class="keyword">private</span> String c;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 将变量名称依次返回，顺序很重要，将来读取参数时需要按顺序获取</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;String&gt; <span class="title function_">shortcutFieldOrder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> List.of(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">// 返回当前配置类的类型，也就是内部的Config</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Class&lt;Config&gt; <span class="title function_">getConfigClass</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Config.class;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在yaml文件中使用：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">default-filters:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">PrintAny=1,2,3</span> <span class="comment"># 注意，这里多个参数以&quot;,&quot;隔开，将来会按照shortcutFieldOrder()方法返回的参数顺序依次复制</span></span><br></pre></td></tr></table></figure>
+
+<p>上面这种配置方式参数必须严格按照shortcutFieldOrder()方法的返回参数名顺序来赋值。</p>
+<p>还有一种用法，无需按照这个顺序，就是手动指定参数名：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">default-filters:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">PrintAny</span></span><br><span class="line">              <span class="attr">args:</span> <span class="comment"># 手动指定参数名，无需按照参数顺序</span></span><br><span class="line">                <span class="attr">a:</span> <span class="number">1</span></span><br><span class="line">                <span class="attr">b:</span> <span class="number">2</span></span><br><span class="line">                <span class="attr">c:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="自定义GlobalFilter"><a href="#自定义GlobalFilter" class="headerlink" title="自定义GlobalFilter"></a>自定义GlobalFilter</h4><p>自定义GlobalFilter则简单很多，直接实现GlobalFilter即可，而且也无法设置动态参数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PrintAnyGlobalFilter</span> <span class="keyword">implements</span> <span class="title class_">GlobalFilter</span>, Ordered &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">        <span class="comment">// 编写过滤器逻辑</span></span><br><span class="line">        System.out.println(<span class="string">&quot;未登录，无法访问&quot;</span>);</span><br><span class="line">        <span class="comment">// 放行</span></span><br><span class="line">        <span class="comment">// return chain.filter(exchange);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 拦截</span></span><br><span class="line">        <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">        response.setRawStatusCode(<span class="number">401</span>);</span><br><span class="line">        <span class="keyword">return</span> response.setComplete();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getOrder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">// 过滤器执行顺序，值越小，优先级越高</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-登录校验"><a href="#3-登录校验" class="headerlink" title="3.登录校验"></a>3.登录校验</h3><p>这里我们使用GlobalFiilter来实现登录校验</p>
+<p>前提条件：</p>
+<p>1.将配置类和工具类信息从hm-service中复制过来</p>
+<p><img src="/../images/image-20250414003120862.png" alt="image-20250414003120862"></p>
+<p><img src="/../images/image-20250414003147782.png" alt="image-20250414003147782"></p>
+<p>2.复制密钥文件</p>
+<p><img src="/../images/image-20250414003210845.png" alt="image-20250414003210845"></p>
+<p>3.编写代码</p>
+<p>登录校验过滤代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(AuthProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AuthGlobalFilter</span> <span class="keyword">implements</span> <span class="title class_">GlobalFilter</span>, Ordered &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> JwtTool jwtTool;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AuthProperties authProperties;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AntPathMatcher</span> <span class="variable">antPathMatcher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AntPathMatcher</span>();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Mono&lt;Void&gt; <span class="title function_">filter</span><span class="params">(ServerWebExchange exchange, GatewayFilterChain chain)</span> &#123;</span><br><span class="line">        <span class="comment">//1.获取请求信息</span></span><br><span class="line">        <span class="type">ServerHttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> exchange.getRequest();</span><br><span class="line">        <span class="comment">//2.判断是否需要拦截</span></span><br><span class="line">        <span class="keyword">if</span>(isExclude(request.getPath().toString()))&#123;</span><br><span class="line">            <span class="comment">//不需要则直接放行</span></span><br><span class="line">            <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//3.获取请求头的token</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        List&lt;String&gt; headers = request.getHeaders().get(<span class="string">&quot;authorization&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(headers != <span class="literal">null</span> &amp;&amp; !headers.isEmpty())&#123;</span><br><span class="line">            token = headers.get(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4.获取用户id</span></span><br><span class="line">        <span class="type">Long</span> <span class="variable">userId</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="comment">//校验token,错误会抛异常</span></span><br><span class="line">            userId = jwtTool.parseToken(token);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            <span class="type">ServerHttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> exchange.getResponse();</span><br><span class="line">            response.setRawStatusCode(<span class="number">401</span>);</span><br><span class="line">            <span class="keyword">return</span> response.setComplete();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//5.保存用户id信息</span></span><br><span class="line">        System.out.println(<span class="string">&quot;用户id:&quot;</span> + userId);</span><br><span class="line">        <span class="comment">//6.放行</span></span><br><span class="line">        <span class="keyword">return</span> chain.filter(exchange);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getOrder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//判断是否在拦截路径之外</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">isExclude</span><span class="params">(String antPath)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (String pathPattern : authProperties.getExcludePaths()) &#123;</span><br><span class="line">            <span class="keyword">if</span>(antPathMatcher.match(pathPattern, antPath))&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意，</strong>别忘了加上注解<code>@EnableConfigurationProperties(AuthProperties.class)</code>启用相应配置文件类，以及注入相应的所需实例，为避免对每个实例使用@Autowried注入,可以使用@RequiredArgsConstructor注解，这样只需要定义全局常量即可。</p>
+<h3 id="4-微服务获取用户信息"><a href="#4-微服务获取用户信息" class="headerlink" title="4.微服务获取用户信息"></a>4.微服务获取用户信息</h3><p>1.首先在网关的过滤器中，将用户信息存入请求头传递给下游微服务</p>
+<p><img src="/../images/image-20250414231001233.png" alt="image-20250414231001233"></p>
+<p>注意传递用户信息的api写法，mutate()方法可以对下游请求做更改，.request表示对请求做处理，利用builder可以对请求中各种信息做修改。</p>
+<p>2.给每个微服务设置拦截器</p>
+<p>拦截器代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserInfoIterceptor</span> <span class="keyword">implements</span> <span class="title class_">HandlerInterceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">//1.获取用户信息</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">userInfo</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;user-info&quot;</span>);</span><br><span class="line">        <span class="comment">//2.判断是否为空</span></span><br><span class="line">        <span class="keyword">if</span>(StrUtil.isNotBlank(userInfo))&#123;</span><br><span class="line">            <span class="comment">//不为空串则保存到ThreadLocal里</span></span><br><span class="line">            UserContext.setUser(Long.valueOf(userInfo));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//3.放行</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterCompletion</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">//移除用户信息</span></span><br><span class="line">        UserContext.removeUser();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.拦截器配置类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ConditionalOnClass(DispatcherServlet.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MvcConfig</span> <span class="keyword">implements</span> <span class="title class_">WebMvcConfigurer</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> &#123;</span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> <span class="title class_">UserInfoIterceptor</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为每个微服务都需要用户信息，且这里拦截器返回的都是true(<strong>网关已经帮我们对需要校验的路径校验好了</strong>，所以没必要再次校验了)，所以可以设置拦截器和其配置类在公共模块hm-common,供所有微服务注入。</p>
+<p>不过，要注意，这个公共模块的配置类默认是扫描不到的。我只知道有两种方法可以设置。</p>
+<p>法1.给微服务启动类设置组件扫描路径</p>
+<p><img src="/../images/image-20250414231646335.png" alt="image-20250414231646335"></p>
+<p>这里是以com.hmall为前缀的所有包都会被扫描，而hm-common这个公共模块正好也是com.hmall为前缀，所以导入这个依赖也会扫描相应的组件。</p>
+<p>法2.在公共模块设置spring.factories</p>
+<p>基于SpringBoot的自动装配原理，我们要将扫描路径添加到公共模块的<code>resources</code>目录下的<code>META-INF/spring.factories</code>文件中：</p>
+<p><img src="/../images/image-20250414231846835.png" alt="image-20250414231846835"></p>
+<p>文件内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\</span><br><span class="line">  com.hmall.common.config.MyBatisConfig,\</span><br><span class="line">  com.hmall.common.config.JsonConfig,\</span><br><span class="line">  com.hmall.common.config.MvcConfig,\</span><br><span class="line">  com.hmall.common.config.MqConfig</span><br></pre></td></tr></table></figure>
+
+<p>这样每个导入这个模块的微服务都会扫描这个模块下的组件。</p>
+<h3 id="5-OpenFeign传递用户"><a href="#5-OpenFeign传递用户" class="headerlink" title="5.OpenFeign传递用户"></a>5.OpenFeign传递用户</h3><p>前端发起的请求都会经过网关再到微服务，由于我们之前编写的过滤器和拦截器功能，微服务可以轻松获取登录用户信息。</p>
+<p>但有些业务是比较复杂的，请求到达微服务后还需要调用其它多个微服务。比如下单业务，流程如下：</p>
+<p><img src="/../images/image-20250414232306472.png" alt="image-20250414232306472"></p>
+<p>下单的过程中，需要调用商品服务扣减库存，调用购物车服务清理用户购物车。而清理购物车时必须知道当前登录的用户身份。但是，<strong>订单服务调用购物车时并没有传递用户信息</strong>，购物车服务无法知道当前用户是谁！</p>
+<p>由于微服务获取用户信息是通过拦截器在请求头中读取，因此要想实现微服务之间的用户信息传递，就<strong>必须在微服务发起调用时把用户信息存入请求头</strong>。</p>
+<p>微服务之间调用是基于OpenFeign来实现的，并不是我们自己发送的请求。我们如何才能让每一个由OpenFeign发起的请求自动携带登录用户信息呢？</p>
+<p>这里要借助Feign中提供的一个拦截器接口：<code>feign.RequestInterceptor</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RequestInterceptor</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Called for every request. </span></span><br><span class="line"><span class="comment">   * Add data using methods on the supplied &#123;<span class="doctag">@link</span> RequestTemplate&#125;.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="keyword">void</span> <span class="title function_">apply</span><span class="params">(RequestTemplate template)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们只需要实现这个接口，然后实现apply方法，利用<code>RequestTemplate</code>类来添加请求头，将用户信息保存到请求头中。这样以来，每次OpenFeign发起请求的时候都会调用该方法，传递用户信息。</p>
+<p>由于<code>FeignClient</code>全部都是在<code>hm-api</code>模块，因此我们在<code>hm-api</code>模块的<code>com.hmall.api.config.DefaultFeignConfig</code>中编写这个拦截器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeafualtFeignConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RequestInterceptor <span class="title function_">requestInterceptor</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">RequestInterceptor</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">apply</span><span class="params">(RequestTemplate requestTemplate)</span> &#123;</span><br><span class="line">                <span class="comment">//1.获取用户信息</span></span><br><span class="line">                <span class="type">Long</span> <span class="variable">userId</span> <span class="operator">=</span> UserContext.getUser();</span><br><span class="line">                <span class="comment">//2.判断用户信息是否为空</span></span><br><span class="line">                <span class="keyword">if</span>(userId == <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="comment">//如果为空则直接跳过</span></span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//3.不为空，则设置到请求头中，传递给下游微服务</span></span><br><span class="line">                requestTemplate.header(<span class="string">&quot;user-info&quot;</span>, userId.toString());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong></p>
+<p>1.这里UserContext在common模块，记得引入依赖</p>
+<p>2.这里创建配置类后，微服务默认是扫描不到这个配置类的，记得给每个需要OpenFign拦截器的启动类上添加配置类.class到注解属性中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(clients = ItemClient.class, defaultConfiguration = DeafualtFeignConfig.class)</span></span><br></pre></td></tr></table></figure>
+
+<p>3.此外，这里注册RequestInterceptor类型的bean能生效的原因：当你使用 Feign 客户端发起调用时，Feign 会创建一个 RequestTemplate 对象来准备请求。</p>
+<p>在请求发送之前，Feign 会遍历所有已注册的 RequestInterceptor 拦截器，并依次调用它们的 apply(RequestTemplate template) 方法。</p>
+<h1 id="三、配置管理"><a href="#三、配置管理" class="headerlink" title="三、配置管理"></a>三、配置管理</h1><p>到目前为止我们已经解决了微服务相关的几个问题：</p>
+<ul>
+<li>微服务远程调用</li>
+<li>微服务注册、发现</li>
+<li>微服务请求路由、负载均衡</li>
+<li>微服务登录用户信息传递</li>
+</ul>
+<p>不过，现在依然还有几个问题需要解决：</p>
+<ul>
+<li>网关路由在配置文件中写死了，如果变更必须重启微服务</li>
+<li>某些业务配置在配置文件中写死了，每次修改都要重启服务</li>
+<li>每个微服务都有很多重复的配置，维护成本高</li>
+</ul>
+<p>这些问题都可以通过统一的<strong>配置管理器服务</strong>解决。而<strong>Nacos</strong>不仅仅具备注册中心功能，也具备配置管理的功能：</p>
+<p><img src="/../images/image-20250414234305911.png" alt="image-20250414234305911"></p>
+<p>微服务共享的配置可以统一交给Nacos保存和管理，在Nacos控制台修改配置后，Nacos会将配置变更推送给相关的微服务，并且无需重启即可生效，<strong>实现配置热更新</strong>。</p>
+<p>网关的路由同样是配置，因此同样可以基于这个功能实现动态路由功能，无需重启网关即可修改路由配置。</p>
+<h3 id="1-配置共享"><a href="#1-配置共享" class="headerlink" title="1.配置共享"></a>1.配置共享</h3><p>我们可以把微服务共享的配置抽取到Nacos中统一管理，这样就不需要每个微服务都重复配置了。分为两步：</p>
+<ul>
+<li>在Nacos中添加共享配置</li>
+<li>微服务拉取配置</li>
+</ul>
+<h4 id="添加共享配置"><a href="#添加共享配置" class="headerlink" title="添加共享配置"></a>添加共享配置</h4><p>至于具体怎么配置就不进行相关介绍了，具体可以去看相关文档<a target="_blank" rel="noopener" href="https://b11et3un53m.feishu.cn/wiki/UMgpwmmQKisWBIkaABbcwAPonVf">day04-微服务02 - 飞书云文档</a></p>
+<h4 id="拉取共享配置"><a href="#拉取共享配置" class="headerlink" title="拉取共享配置"></a>拉取共享配置</h4><p>这里要注意几个问题：</p>
+<p>1.Nacos中的配置文件的读取是先于微服务配置文件<code>application.yaml</code>的。所以如果我们把nacos地址写在<code>application.yaml</code>文件中，那么这个微服务启动注册到nacos后也没法读取nacos中的相关配置了。</p>
+<p>这里就需要使用一个名为<code>bootstrap.yaml</code>文件。这个配置文件的加载优先于nacos中的配置文件。所以需要把nacos相关配置信息写入这个文件中。</p>
+<p><img src="/../images/image-20250415183255455.png" alt="image-20250415183255455"></p>
+<p>具体步骤如下</p>
+<p>（1）给微服务引入相关依赖</p>
+<p>注意力，这里的nacos配置依赖和注册不是同一个依赖包</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--nacos配置管理--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--读取bootstrap文件--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-bootstrap<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>（2）编写bootstrap.yaml配置文件</p>
+<p><img src="/../images/image-20250415183333079.png" alt="image-20250415183333079"></p>
+<p>如上所示，除了写nacos地址之外，还记得配置微服务名称和要读取的nacos中的配置文件</p>
+<p>2.配置文件中的配置为了通用性，防止写死。在写值时可以使用<code>&#123;配置信息路径: 默认值&#125;</code>(例如<code>&#123;hm.db.user:root&#125;</code>)。写了这个之后，将来会读取微服务中的配置文件application.yaml中的信息，若存在则赋值，否则使用默认值。</p>
+<h3 id="2-配置热更新"><a href="#2-配置热更新" class="headerlink" title="2.配置热更新"></a>2.配置热更新</h3><p>配置热更新就是为了防止某些参数写死，导致需要修改时需要重新打包部署。而是通过配置文件的更新，配置类会监听配置信息的变更，实时更新相关参数信息。</p>
+<p>具体实习简单来说就是将参数信息配置到nacos中，其他的像是创建配置类、使用配置类都和正常使用没区别。</p>
+<h4 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h4><p>有很多的业务相关参数，将来可能会根据实际情况临时调整。例如购物车业务，购物车数量有一个上限，默认是10，对应代码如下：</p>
+<p><img src="/../images/image-20250415184557786.png" alt="image-20250415184557786"></p>
+<p>现在这里购物车是写死的固定值，我们应该将其配置在配置文件中，方便后期修改。</p>
+<p>但现在的问题是，即便写在配置文件中，修改了配置还是需要重新打包、重启服务才能生效。能不能不用重启，直接生效呢？</p>
+<p>这就要用到Nacos的配置热更新能力了，分为两步：</p>
+<ul>
+<li>在Nacos中添加配置</li>
+<li>在微服务读取配置</li>
+</ul>
+<h4 id="在Nacos中添加配置"><a href="#在Nacos中添加配置" class="headerlink" title="在Nacos中添加配置"></a>在Nacos中添加配置</h4><h4 id="在微服务中读取配置"><a href="#在微服务中读取配置" class="headerlink" title="在微服务中读取配置"></a>在微服务中读取配置</h4><p>配置信息类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ConfigurationProperties(prefix = &quot;hm.cart&quot;)</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CartProperties</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String maxCount;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/image-20250415185145800.png" alt="image-20250415185145800"></p>
+<h3 id="3-动态路由"><a href="#3-动态路由" class="headerlink" title="3.动态路由"></a>3.动态路由</h3><p>网关的路由配置全部是在项目启动时由<code>org.springframework.cloud.gateway.route.CompositeRouteDefinitionLocator</code>在项目启动的时候加载，并且一经加载就会缓存到内存中的路由表内（一个Map），不会改变。也不会监听路由变更，所以，我们无法利用配置热更新来实现路由更新。</p>
+<p>因此，我们必须<strong>监听Nacos的配置变更</strong>，然后手动把最新的路由更新到路由表中。这里有两个难点：</p>
+<ul>
+<li>如何监听Nacos配置变更？</li>
+<li>如何把路由信息更新到路由表？</li>
+</ul>
+<h4 id="1-监听Nacos配置变更"><a href="#1-监听Nacos配置变更" class="headerlink" title="1.监听Nacos配置变更"></a>1.监听Nacos配置变更</h4><p>在Nacos官网中给出了手动监听Nacos配置变更的SDK：</p>
+<p><a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/docs/sdk.html">https://nacos.io/zh-cn/docs/sdk.html</a></p>
+<p>如果希望 Nacos 推送配置变更，可以使用 Nacos 动态监听配置接口来实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addListener</span><span class="params">(String dataId, String group, Listener listener)</span></span><br></pre></td></tr></table></figure>
+
+<p>请求参数说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>参数名</strong></th>
+<th align="left"><strong>参数类型</strong></th>
+<th align="left"><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">dataId</td>
+<td align="left">string</td>
+<td align="left">配置 ID，保证全局唯一性，只允许英文字符和 4 种特殊字符（”.”、”:”、”-“、”_”）。不超过 256 字节。</td>
+</tr>
+<tr>
+<td align="left">group</td>
+<td align="left">string</td>
+<td align="left">配置分组，一般是默认的DEFAULT_GROUP。</td>
+</tr>
+<tr>
+<td align="left">listener</td>
+<td align="left">Listener</td>
+<td align="left">监听器，配置变更进入监听器的回调函数。</td>
+</tr>
+</tbody></table>
+<p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">serverAddr</span> <span class="operator">=</span> <span class="string">&quot;&#123;serverAddr&#125;&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">dataId</span> <span class="operator">=</span> <span class="string">&quot;&#123;dataId&#125;&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">group</span> <span class="operator">=</span> <span class="string">&quot;&#123;group&#125;&quot;</span>;</span><br><span class="line"><span class="comment">// 1.创建ConfigService，连接Nacos</span></span><br><span class="line"><span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">properties.put(<span class="string">&quot;serverAddr&quot;</span>, serverAddr);</span><br><span class="line"><span class="type">ConfigService</span> <span class="variable">configService</span> <span class="operator">=</span> NacosFactory.createConfigService(properties);</span><br><span class="line"><span class="comment">// 2.读取配置</span></span><br><span class="line"><span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> configService.getConfig(dataId, group, <span class="number">5000</span>);</span><br><span class="line"><span class="comment">// 3.添加配置监听器</span></span><br><span class="line">configService.addListener(dataId, group, <span class="keyword">new</span> <span class="title class_">Listener</span>() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">receiveConfigInfo</span><span class="params">(String configInfo)</span> &#123;</span><br><span class="line">        <span class="comment">// 配置变更的通知处理</span></span><br><span class="line">                System.out.println(<span class="string">&quot;recieve1:&quot;</span> + configInfo);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> Executor <span class="title function_">getExecutor</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里核心的步骤有2步：</p>
+<ul>
+<li>创建ConfigService，目的是连接到Nacos</li>
+<li>添加配置监听器，编写配置变更的通知处理逻辑</li>
+</ul>
+<p>由于我们采用了<code>spring-cloud-starter-alibaba-nacos-config</code>自动装配，因此<code>ConfigService</code>已经在<code>com.alibaba.cloud.nacos.NacosConfigAutoConfiguration</code>中自动创建好了：</p>
+<p><img src="/../images/image-20250415213319784.png" alt="image-20250415213319784"></p>
+<p>NacosConfigManager中是负责管理Nacos的ConfigService的，具体代码如下：</p>
+<p><img src="/../images/image-20250415213403322.png" alt="image-20250415213403322"></p>
+<p>因此，只要我们拿到<code>NacosConfigManager</code>就等于拿到了<code>ConfigService</code>，第一步就实现了。</p>
+<p>第二步，编写监听器。虽然官方提供的SDK是ConfigService中的addListener，不过项目第一次启动时不仅仅需要添加监听器，也需要读取配置，因此建议使用的API是这个：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String <span class="title function_">getConfigAndSignListener</span><span class="params">(</span></span><br><span class="line"><span class="params">    String dataId, // 配置文件id</span></span><br><span class="line"><span class="params">    String group, // 配置组，走默认</span></span><br><span class="line"><span class="params">    <span class="type">long</span> timeoutMs, // 读取配置的超时时间</span></span><br><span class="line"><span class="params">    Listener listener // 监听器</span></span><br><span class="line"><span class="params">)</span> <span class="keyword">throws</span> NacosException;</span><br></pre></td></tr></table></figure>
+
+<p>既可以配置监听器，并且会根据dataId和group读取配置并返回。我们就可以在项目启动时先更新一次路由，后续随着配置变更通知到监听器，完成路由更新。</p>
+<h4 id="2-更新路由"><a href="#2-更新路由" class="headerlink" title="2.更新路由"></a>2.更新路由</h4><p>更新路由要用到<code>org.springframework.cloud.gateway.route.RouteDefinitionWriter</code>这个接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.springframework.cloud.gateway.route;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> reactor.core.publisher.Mono;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Spencer Gibb</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RouteDefinitionWriter</span> &#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新路由到路由表，如果路由id重复，则会覆盖旧的路由</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">        Mono&lt;Void&gt; <span class="title function_">save</span><span class="params">(Mono&lt;RouteDefinition&gt; route)</span>;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据路由id删除某个路由</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">        Mono&lt;Void&gt; <span class="title function_">delete</span><span class="params">(Mono&lt;String&gt; routeId)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里更新的路由，也就是RouteDefinition，之前我们见过，包含下列常见字段：</p>
+<ul>
+<li>id：路由id</li>
+<li>predicates：路由匹配规则</li>
+<li>filters：路由过滤器</li>
+<li>uri：路由目的地</li>
+</ul>
+<p>将来我们保存到Nacos的配置也要符合这个对象结构，将来我们以JSON来保存，格式如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;item&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;predicates&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="attr">&quot;_genkey_0&quot;</span><span class="punctuation">:</span><span class="string">&quot;/items/**&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;_genkey_1&quot;</span><span class="punctuation">:</span><span class="string">&quot;/search/**&quot;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;filters&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lb://item-service&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上JSON配置就等同于：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">item</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://item-service</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/items/**,/search/**</span></span><br></pre></td></tr></table></figure>
+
+<p>之所以使用Json格式存储路由是因为Json有现成的工具类可以转换成RouteDefinition这个类，而yaml格式文件则不好转换。</p>
+<h4 id="3-实现动态路由"><a href="#3-实现动态路由" class="headerlink" title="3.实现动态路由"></a>3.实现动态路由</h4><p>1.引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--统一配置管理--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--加载bootstrap--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-bootstrap<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2.编写bootstrap.yml</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">gateway</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">192.168</span><span class="number">.10</span><span class="number">.101</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="attr">file-extension:</span> <span class="string">yaml</span></span><br><span class="line">        <span class="attr">shared-configs:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">dataId:</span> <span class="string">shared-log.yaml</span> <span class="comment"># 共享日志配置</span></span><br></pre></td></tr></table></figure>
+
+<p>3.创建动态路由类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicRouteLoader</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RouteDefinitionWriter writer;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> NacosConfigManager nacosConfigManager;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 路由配置文件的id和分组</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">dataId</span> <span class="operator">=</span> <span class="string">&quot;gateway-routes.json&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">group</span> <span class="operator">=</span> <span class="string">&quot;DEFAULT_GROUP&quot;</span>;</span><br><span class="line">    <span class="comment">// 保存更新过的路由id</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Set&lt;String&gt; routeIds = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initRouteConfigListener</span><span class="params">()</span> <span class="keyword">throws</span> NacosException &#123;</span><br><span class="line">        <span class="comment">// 1.注册监听器并首次拉取配置</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">configInfo</span> <span class="operator">=</span> nacosConfigManager.getConfigService()</span><br><span class="line">                .getConfigAndSignListener(dataId, group, <span class="number">5000</span>, <span class="keyword">new</span> <span class="title class_">Listener</span>() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> Executor <span class="title function_">getExecutor</span><span class="params">()</span> &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">receiveConfigInfo</span><span class="params">(String configInfo)</span> &#123;</span><br><span class="line">                        updateConfigInfo(configInfo);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">        <span class="comment">// 2.首次启动时，更新一次配置</span></span><br><span class="line">        updateConfigInfo(configInfo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">updateConfigInfo</span><span class="params">(String configInfo)</span> &#123;</span><br><span class="line">        log.debug(<span class="string">&quot;监听到路由配置变更，&#123;&#125;&quot;</span>, configInfo);</span><br><span class="line">        <span class="comment">// 1.反序列化</span></span><br><span class="line">        List&lt;RouteDefinition&gt; routeDefinitions = JSONUtil.toList(configInfo, RouteDefinition.class);</span><br><span class="line">        <span class="comment">// 2.更新前先清空旧路由</span></span><br><span class="line">        <span class="comment">// 2.1.清除旧路由</span></span><br><span class="line">        <span class="keyword">for</span> (String routeId : routeIds) &#123;</span><br><span class="line">            writer.delete(Mono.just(routeId)).subscribe();</span><br><span class="line">        &#125;</span><br><span class="line">        routeIds.clear();</span><br><span class="line">        <span class="comment">// 2.2.判断是否有新的路由要更新</span></span><br><span class="line">        <span class="keyword">if</span> (CollUtils.isEmpty(routeDefinitions)) &#123;</span><br><span class="line">            <span class="comment">// 无新路由配置，直接结束</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 3.更新路由</span></span><br><span class="line">        routeDefinitions.forEach(routeDefinition -&gt; &#123;</span><br><span class="line">            <span class="comment">// 3.1.更新路由</span></span><br><span class="line">            writer.save(Mono.just(routeDefinition)).subscribe();</span><br><span class="line">            <span class="comment">// 3.2.记录路由id，方便将来删除</span></span><br><span class="line">            routeIds.add(routeDefinition.getId());</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中引入的如下两个类，write用于保存路由信息，nacosConfigManager用于获取拉取配置并设置监听器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> RouteDefinitionWriter writer;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> NacosConfigManager nacosConfigManager;</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、微服务保护"><a href="#四、微服务保护" class="headerlink" title="四、微服务保护"></a>四、微服务保护</h1><h2 id="问题引入-1"><a href="#问题引入-1" class="headerlink" title="问题引入"></a>问题引入</h2><h3 id="1-业务健壮性问题"><a href="#1-业务健壮性问题" class="headerlink" title="1.业务健壮性问题"></a>1.业务健壮性问题</h3><p>当微服务之间相互调用时，若某个调用的微服务发生故障，那么整体业务就失败了。但从业务角度来说，即使某些情况下失败，依然需要展示其余某些数据。</p>
+<p>拿购物车举例，在获取购物车列表时，还会微服务远程调用获取商品最新的价格是，而就算获取最新商品价格失败，也不应该整个业务失败，毕竟我看的是购物车，不是最新价格。</p>
+<h3 id="2-级联问题"><a href="#2-级联问题" class="headerlink" title="2.级联问题"></a>2.级联问题</h3><p>当前微服务并发较高，又需要远程调用其他微服务，而当被调用微服务阻塞时，会导致当前微服务也阻塞。这种因为某个接口占用资源过多，导致多个微服务的受到影响的情况就是级联问题。</p>
+<p>依旧以购物车为例，查询购物车时，会查询当前购物车中所有商品的最新价格，当商品微服务响应时间过长时，购物车微服务也会受到影响，导致购物车Tomcat连接占用较多，所有接口的响应时间都会增加。</p>
+<p>依次类推，整个微服务群中与购物车服务、商品服务等有调用关系的服务可能都会出现问题，最终导致整个集群不可用。</p>
+<p><img src="/../images/image-20250415225307819.png" alt="image-20250415225307819"></p>
+<p>这就叫<strong>级联失败</strong>问题，或者说<strong>雪崩</strong>问题</p>
+<h2 id="服务保护方案"><a href="#服务保护方案" class="headerlink" title="服务保护方案"></a>服务保护方案</h2><p>保证服务运行的健壮性，避免级联失败导致的雪崩问题，就属于微服务保护。</p>
+<p>以下是三种保护微服务的方法</p>
+<ul>
+<li>请求限流</li>
+<li>线程隔离</li>
+<li>服务熔断</li>
+</ul>
+<h3 id="请求限流"><a href="#请求限流" class="headerlink" title="请求限流"></a>请求限流</h3><p>请求限流就是处理短时间大量请求打过来的问题。我们可以设个请求阈值在接口处，每秒最多可以处理多少请求，超过这个数的后面要么请求失败要么排队等待。</p>
+<p><img src="/../images/image-20250415225901562.png" alt="image-20250415225901562"></p>
+<h3 id="线程隔离"><a href="#线程隔离" class="headerlink" title="线程隔离"></a>线程隔离</h3><p>给每个接口设置最大可以占用的线程数,以保证当前接口即使故障也不会占用当前服务的所有线程资源，以避免雪崩问题。</p>
+<h3 id="服务熔断"><a href="#服务熔断" class="headerlink" title="服务熔断"></a>服务熔断</h3><p>服务熔断主要是处理业务健壮性问题，即当前微服务调用的其他微服务发生异常时，走相应的<strong>降级方案</strong>。</p>
+<p><img src="/../images/image-20250416003526607.png" alt="image-20250416003526607"></p>
+<p>所以，我们要做两件事情：</p>
+<ul>
+<li><strong>编写服务降级逻辑</strong>：就是服务调用失败后的处理逻辑，根据业务场景，可以抛出异常，也可以返回友好提示或默认数据。</li>
+<li><strong>异常统计和熔断</strong>：统计服务提供方的异常比例，当比例过高表明该接口会影响到其它服务，应该拒绝调用该接口，而是直接走降级逻辑。</li>
+</ul>
+<h2 id="Sentinel"><a href="#Sentinel" class="headerlink" title="Sentinel"></a>Sentinel</h2><h3 id="1-安装和使用"><a href="#1-安装和使用" class="headerlink" title="1.安装和使用"></a>1.安装和使用</h3><p>Sentinel是阿里巴巴开源的一款服务保护框架，目前已经加入SpringCloudAlibaba中。官方网站：</p>
+<p><a target="_blank" rel="noopener" href="https://sentinelguard.io/zh-cn/">https://sentinelguard.io/zh-cn/</a></p>
+<p>Sentinel 的使用可以分为两个部分:</p>
+<ul>
+<li><strong>核心库</strong>（Jar包）：不依赖任何框架&#x2F;库，能够运行于 Java 8 及以上的版本的运行时环境，同时对 Dubbo &#x2F; Spring Cloud 等框架也有较好的支持。在项目中引入依赖即可实现服务限流、隔离、熔断等功能。</li>
+<li><strong>控制台</strong>（Dashboard）：Dashboard 主要负责管理推送规则、监控、管理机器信息等。</li>
+</ul>
+<p>为了方便监控微服务，我们先把Sentinel的控制台搭建出来。</p>
+<p>1）下载jar包</p>
+<p>下载地址：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/releases">https://github.com/alibaba/Sentinel/releases</a></p>
+<p>也可以直接使用黑马资料中提供的版本：</p>
+<p><img src="/../images/image-20250416003758078.png" alt="image-20250416003758078"></p>
+<p>2）运行</p>
+<p>将jar包放在任意非中文、不包含特殊字符的目录下，重命名为<code>sentinel-dashboard.jar</code>：</p>
+<p>打开终端输入如下命令即可启动成功</p>
+<p><code>java &#39;-Dserver.port=8090&#39; &#39;-Dcsp.sentinel.dashboard.server=[localhost:8090](http://localhost:8090)&#39; -jar sentinel-dashboard.jar</code></p>
+<p><img src="/../images/image-20250416004139210.png" alt="image-20250416004139210"></p>
+<p>此时访问<code>localhost:8090</code>可看到sentinel的控制台</p>
+<p>登录的账号密码默认都是sentinel</p>
+<h3 id="2-微服务整合"><a href="#2-微服务整合" class="headerlink" title="2.微服务整合"></a>2.微服务整合</h3><p>(1)引入sentinel依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--sentinel--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-sentinel<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>(2)配置控制台</p>
+<p>在application.yml文件添加如下内容</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span> </span><br><span class="line">    <span class="attr">sentinel:</span></span><br><span class="line">      <span class="attr">transport:</span></span><br><span class="line">        <span class="attr">dashboard:</span> <span class="string">localhost:8090</span></span><br></pre></td></tr></table></figure>
+
+<p>(3)访问<code>cart-service</code>的任意端点</p>
+<p>重启<code>cart-service</code>，然后访问查询购物车接口，sentinel的客户端就会将服务访问的信息提交到<code>sentinel-dashboard</code>控制台。并展示出统计信息：</p>
+<p><img src="/../images/image-20250416004756912.png" alt="image-20250416004756912"></p>
+<p>点击簇点链路菜单，会看到下面的页面：</p>
+<p><img src="/../images/image-20250416004905066.png" alt="image-20250416004905066"></p>
+<p>所谓簇点链路，就是单机调用链路，是一次请求进入服务后经过的每一个被<code>Sentinel</code>监控的资源。默认情况下，<code>Sentinel</code>会监控<code>SpringMVC</code>的每一个<code>Endpoint</code>（接口）。</p>
+<p>因此，我们看到<code>/carts</code>这个接口路径就是其中一个簇点，我们可以对其进行限流、熔断、隔离等保护措施。</p>
+<p>不过，需要注意的是，我们的SpringMVC接口是按照Restful风格设计，因此购物车的查询、删除、修改等接口全部都是<code>/carts</code>路径：</p>
+<p><img src="/../images/image-20250416005004505.png" alt="image-20250416005004505"></p>
+<p>默认情况下Sentinel会把路径作为簇点资源的名称，无法区分路径相同但请求方式不同的接口，查询、删除、修改等都被识别为一个簇点资源，这显然是不合适的。</p>
+<p>所以我们可以选择打开Sentinel的请求方式前缀，把<code>请求方式 + 请求路径</code>作为簇点资源名：</p>
+<p>首先，在<code>cart-service</code>的<code>application.yml</code>中添加下面的配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">sentinel:</span></span><br><span class="line">      <span class="attr">transport:</span></span><br><span class="line">        <span class="attr">dashboard:</span> <span class="string">localhost:8090</span></span><br><span class="line">      <span class="attr">http-method-specify:</span> <span class="literal">true</span> <span class="comment"># 开启请求方式前缀</span></span><br></pre></td></tr></table></figure>
+
+<p>然后，重启服务，通过页面访问购物车的相关接口，可以看到sentinel控制台的簇点链路发生了变化：</p>
+<p><img src="/../images/image-20250416005226598.png" alt="image-20250416005226598"></p>
+<p>即使路径相同，也会有请求方式前缀做区分。</p>
+<h2 id="实操"><a href="#实操" class="headerlink" title="实操"></a>实操</h2><h3 id="请求限流-1"><a href="#请求限流-1" class="headerlink" title="请求限流"></a>请求限流</h3><p>在簇点链路页面点击<strong>流控</strong>即可做限流配置</p>
+<p><img src="/../images/image-20250416005402826.png" alt="image-20250416005402826"></p>
+<p>QPS：Queries Per Second是衡量信息检索系统（例如搜索引擎或数据库）在一秒钟内接收到的搜索流量的一种常见度量。该术语在任何请求-响应系统中都得到更广泛的使用，更正确地称为每秒请求数（RPS：Request Per Second）。</p>
+<h3 id="线程隔离-1"><a href="#线程隔离-1" class="headerlink" title="线程隔离"></a>线程隔离</h3><p>限流可以降低服务器压力，尽量减少因并发流量引起的服务故障的概率，但并不能完全避免服务故障。一旦某个服务出现故障，我们必须隔离对这个服务的调用，避免发生雪崩。</p>
+<p>比如，查询购物车的时候需要查询商品，为了避免因商品服务出现故障导致购物车服务级联失败，我们可以把购物车业务中查询商品的部分隔离起来，限制可用的线程资源。这样，即便商品服务出现故障，最多导致查询购物车业务故障，并且可用的线程资源也被限定在一定范围，不会导致整个购物车服务崩溃。</p>
+<h4 id="1-OpenFeign整合Sentinel"><a href="#1-OpenFeign整合Sentinel" class="headerlink" title="1.OpenFeign整合Sentinel"></a>1.OpenFeign整合Sentinel</h4><p>(1)修改cart-service模块的application.yml文件，开启Feign的sentinel功能：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">sentinel:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span> <span class="comment"># 开启feign对sentinel的支持</span></span><br></pre></td></tr></table></figure>
+
+<p>尽管开启了Sentinel功能，但我们还需要配置最大排队数量等参数，因为不是说超了当前QPS的部分就一定拒绝请求了，依然可以排队等待处理。</p>
+<p>(2)配置一下cart-service模块的application.yml文件，修改tomcat连接：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8082</span></span><br><span class="line">  <span class="attr">tomcat:</span></span><br><span class="line">    <span class="attr">threads:</span></span><br><span class="line">      <span class="attr">max:</span> <span class="number">50</span> <span class="comment"># 允许的最大线程数</span></span><br><span class="line">    <span class="attr">accept-count:</span> <span class="number">50</span> <span class="comment"># 最大排队等待数量</span></span><br><span class="line">    <span class="attr">max-connections:</span> <span class="number">100</span> <span class="comment"># 允许的最大连接</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，默认情况下SpringBoot项目的tomcat最大线程数是200，允许的最大连接是8492，单机测试很难打满。 </p>
+<p>然后重启cart-service服务，可以看到查询商品的FeignClient自动变成了一个簇点资源：</p>
+<p><img src="/../images/image-20250416010616317.png" alt="image-20250416010616317"></p>
+<h4 id="2-配置线程隔离"><a href="#2-配置线程隔离" class="headerlink" title="2.配置线程隔离"></a>2.配置线程隔离</h4><p>点击流控，选择并发线程数即可。</p>
+<p><img src="/../images/image-20250416010648431.png" alt="image-20250416010648431"></p>
+<p>假设当线程每秒可以处理2个请求，那么5个线程最多每秒可以处理10个请求，即10QPS。而超出的请求自然会被拒绝。</p>
+<h3 id="服务熔断-1"><a href="#服务熔断-1" class="headerlink" title="服务熔断"></a>服务熔断</h3><p>对于上面的线程隔离还是存在几个问题。</p>
+<p>第一，超出的QPS上限的请求就只能抛出异常，从而导致购物车的查询失败。但从业务角度来说，即便没有查询到最新的商品信息，购物车也应该展示给用户，用户体验更好。也就是给查询失败设置一个<strong>降级处理</strong>逻辑。</p>
+<p>第二，由于查询商品的延迟较高（模拟的500ms），从而导致查询购物车的响应时间也变的很长。这样不仅拖慢了购物车服务，消耗了购物车服务的更多资源，而且用户体验也很差。对于商品服务这种不太健康的接口，我们应该直接停止调用，直接走降级逻辑，避免影响到当前服务。也就是将商品查询接口<strong>熔断</strong>。</p>
+<h4 id="1-编写降级逻辑"><a href="#1-编写降级逻辑" class="headerlink" title="1.编写降级逻辑"></a>1.编写降级逻辑</h4><p>触发限流或熔断后的请求不一定要直接报错，也可以返回一些默认数据或者友好提示，用户体验会更好。</p>
+<p>给FeignClient编写失败后的降级逻辑有两种方式：</p>
+<ul>
+<li>方式一：FallbackClass，无法对远程调用的异常做处理</li>
+<li>方式二：FallbackFactory，可以对远程调用的异常做处理，我们一般选择这种方式。</li>
+</ul>
+<p>这里以方式二为例：</p>
+<p>（1）在hm-api模块新建一个包存放各个降级处理类</p>
+<p><img src="/../images/image-20250416100536500.png" alt="image-20250416100536500"></p>
+<p>如图所示，其实很简单，就是实现FallbackFactory&lt;&gt;这个类，泛型里填写要降级处理的Client接口。此时会让你实现create方法，在方法里直接return 相应的<strong>匿名内部类</strong>。</p>
+<p>匿名内部类是什么？</p>
+<p>匿名：没有名字的意思。内部类：写在其他类内部的类。匿名内部类的作用是简化代码。</p>
+<p>原本我们需要创建子类或者实现类，去继承父类和实现接口，才能重写其中的方法。但是有时候我们这样做了，然而子类和实现类却只需要使用一次（定义了一个对象）。这个时候我们就可以使用匿名内部类，不用去写子类和实现类，起到简化代码的作用。<br>代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ItemClientFallback</span> <span class="keyword">implements</span> <span class="title class_">FallbackFactory</span>&lt;ItemClient&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> ItemClient <span class="title function_">create</span><span class="params">(Throwable cause)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ItemClient</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> List&lt;ItemDTO&gt; <span class="title function_">queryItemByIds</span><span class="params">(Collection&lt;Long&gt; ids)</span> &#123;</span><br><span class="line">                log.error(<span class="string">&quot;远程调用ItemClient#queryItemByIds方法出现异常，参数&#123;&#125;&quot;</span>, ids, cause);</span><br><span class="line">                <span class="comment">//返回空集合</span></span><br><span class="line">                <span class="keyword">return</span> CollUtils.emptyList();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">deductStock</span><span class="params">(List&lt;OrderDetailDTO&gt; items)</span> &#123;</span><br><span class="line">                <span class="comment">//库存扣减失败就是失败了，需要事务回滚</span></span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">BizIllegalException</span>(cause);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>（2）将降级处理类注册为一个Bean</p>
+<p><img src="/../images/image-20250416101626684.png" alt="image-20250416101626684"></p>
+<p>（3）在Client接口的@FeignClient注解添加fallbackFactory属性,引入降级处理类</p>
+<p><img src="/../images/image-20250416102007002.png" alt="image-20250416102007002"></p>
+<h4 id="2-服务熔断"><a href="#2-服务熔断" class="headerlink" title="2.服务熔断"></a>2.服务熔断</h4><p>现在已经实现了降级逻辑，但有的时候某些接口可能频繁或者一直有问题，这个时候就没必要去访问这些微服务接口了，直接在发请求时就熔断，走降级逻辑，以减少不必要的请求时长。</p>
+<p>这就需要我们使用Sentinel的断路器来设置熔断阈值。</p>
+<p>Sentinel中的断路器不仅可以统计某个接口的<strong>慢请求比例</strong>，还可以统计<strong>异常请求比例</strong>。当这些比例超出阈值时，就会<strong>熔断</strong>该接口，即拦截访问该接口的一切请求，降级处理；当该接口恢复正常时，再放行对于该接口的请求。</p>
+<p>断路器的工作状态切换有一个状态机来控制：</p>
+<p><img src="/../images/image-20250416102833959.png" alt="image-20250416102833959"></p>
+<p>状态机包括三个状态：</p>
+<ul>
+<li><strong>closed</strong>：关闭状态，断路器放行所有请求，并开始统计异常比例、慢请求比例。超过阈值则切换到open状态</li>
+<li><strong>open</strong>：打开状态，服务调用被<strong>熔断</strong>，访问被熔断服务的请求会被拒绝，快速失败，直接走降级逻辑。Open状态持续一段时间后会进入half-open状态</li>
+<li><strong>half-open</strong>：半开状态，放行一次请求，根据执行结果来判断接下来的操作。 <ul>
+<li>请求成功：则切换到closed状态</li>
+<li>请求失败：则切换到open状态</li>
+</ul>
+</li>
+</ul>
+<p>同样，在簇点链路中点击熔断按钮</p>
+<p><img src="/../images/image-20250416103725143.png" alt="image-20250416103725143"></p>
+<p>图中所示是慢调用比例的熔断策略。对应的参数详解如下所示:</p>
+<p>最大RT：响应时长超过最大RT的值就是慢调用。</p>
+<p>熔断时长：熔断的持续时长</p>
+<p>统计时长：多长时间统计一次</p>
+<p>比例阈值：慢调用的比例</p>
+<p>最小请求数：在统计时长内最少统计5个请求计算比例阈值来判断是否需要熔断</p>
+<h1 id="五、分布式事务"><a href="#五、分布式事务" class="headerlink" title="五、分布式事务"></a>五、分布式事务</h1><p>分布式事务，顾名思义就是处理分布式情况下的事务问题。</p>
+<p>以下单业务为例</p>
+<p><img src="/../images/image-20250416104416162.png" alt="image-20250416104416162"></p>
+<p>由于订单、购物车、商品分别在三个不同的微服务，而每个微服务都有自己独立的数据库，因此下单过程中就会跨多个数据库完成业务。而每个微服务都会执行自己的本地事务：</p>
+<ul>
+<li>交易服务：下单事务</li>
+<li>购物车服务：清理购物车事务</li>
+<li>库存服务：扣减库存事务</li>
+</ul>
+<p>整个业务中，各个本地事务是有关联的。因此每个微服务的本地事务，也可以称为<strong>分支事务</strong>。多个有关联的分支事务一起就组成了<strong>全局事务</strong>。我们必须保证整个全局事务同时成功或失败。</p>
+<p>我们知道每一个分支事务就是传统的<strong>单体事务</strong>，都可以满足ACID特性，但全局事务跨越多个服务、多个数据库，是否还能满足呢？</p>
+<p><strong>ACID特性：</strong></p>
+<p><strong>原子性（Atomicity）：</strong>事务是不可分割的最小操作单元，要么全部成功，要么全部失败，不会出现部分执行的情况</p>
+<p><strong>一致性（Consistency）：</strong>事务执行前后，数据库从一个一致的状态转换到另一个一致的状态，不会出现数据违反完整性约束(例如银行扣钱不能扣成负数)的情况</p>
+<p><strong>隔离性（Isolation）：</strong>多个事务并发执行时，每个事务都像是在独立的环境中运行，一个事务的执行不会被其他事务干扰。隔离有四个级别，最高级别时串行化（频繁的加锁）</p>
+<p><strong>持久性（Durability）：</strong>事务一旦提交，其对数据库的改变就是永久性的，即使系统发生故障也不会丢失</p>
+<h2 id="1-Seata"><a href="#1-Seata" class="headerlink" title="1.Seata"></a>1.Seata</h2><p>解决分布式事务的方案有很多，但实现起来都比较复杂，因此我们一般会使用开源的框架来解决分布式事务问题。在众多的开源分布式事务框架中，功能最完善、使用最多的就是阿里巴巴在2019年开源的Seata了。</p>
+<p><a target="_blank" rel="noopener" href="https://seata.io/zh-cn/docs/overview/what-is-seata.html">https://seata.io/zh-cn/docs/overview/what-is-seata.html</a></p>
+<p>其实分布式事务产生的一个重要原因，就是参与事务的多个分支事务互相无感知，不知道彼此的执行状态。因此解决分布式事务的思想非常简单：</p>
+<p>就是找一个统一的<strong>事务协调者</strong>，与多个分支事务通信，检测每个分支事务的执行状态，保证全局事务下的每一个分支事务同时成功或失败即可。大多数的分布式事务框架都是基于这个理论来实现的。</p>
+<p>Seata也不例外，在Seata的事务管理中有三个重要的角色：</p>
+<ul>
+<li><strong>TC</strong> <strong>(Transaction Coordinator) -</strong> <strong>事务协调者：</strong>维护全局和分支事务的状态，协调全局事务提交或回滚。 </li>
+<li><strong>TM (Transaction Manager) -</strong> <strong>事务管理器：</strong>定义全局事务的范围、开始全局事务、提交或回滚全局事务。 </li>
+<li><strong>RM (Resource Manager) -</strong> <strong>资源管理器：</strong>管理分支事务，与TC交谈以<strong>注册分支事务和报告分支事务的状态</strong>，并驱动分支事务提交或回滚。</li>
+</ul>
+<p>seata架构图</p>
+<p><img src="/../images/image-20250416112026023.png" alt="image-20250416112026023"></p>
+<p>其中，<strong>TM</strong>和<strong>RM</strong>可以理解为Seata的客户端部分，引入到参与事务的微服务依赖中即可。将来<strong>TM</strong>和<strong>RM</strong>就会协助微服务，实现本地分支事务与<strong>TC</strong>之间交互，实现事务的提交或回滚。</p>
+<p>而<strong>TC</strong>服务则是事务协调中心，是一个独立的微服务，需要单独部署。</p>
+<h3 id="（1）部署TC服务"><a href="#（1）部署TC服务" class="headerlink" title="（1）部署TC服务"></a>（1）部署TC服务</h3><p>1.准备seata数据库表并导入到数据库中</p>
+<p><img src="/../images/image-20250416152012466.png" alt="image-20250416152012466"></p>
+<p>执行该sql后的数据库结构</p>
+<p><img src="/../images/image-20250416152051837.png" alt="image-20250416152051837"></p>
+<p>2.将seata文件夹拷贝到虚拟机的&#x2F;root目录下</p>
+<p><img src="/../images/image-20250416152239331.png" alt="image-20250416152239331"></p>
+<p><img src="/../images/image-20250416152235697.png" alt="image-20250416152235697"></p>
+<p>3.docker部署</p>
+<p>在虚拟机&#x2F;root目录下执行如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run --name seata \</span><br><span class="line">-p 8099:8099 \</span><br><span class="line">-p 7099:7099 \</span><br><span class="line">-e SEATA_IP=192.168.150.101 \</span><br><span class="line">-v ./seata:/seata-server/resources \</span><br><span class="line">--privileged=true \</span><br><span class="line">--network hm-net \</span><br><span class="line">-d \</span><br><span class="line">seataio/seata-server:1.5.2</span><br></pre></td></tr></table></figure>
+
+<p>注意把SEATA_IP换成你的虚拟机ip以及加入和mysql、nacos同一个的网络中。</p>
+<h3 id="（2）微服务集成Seata"><a href="#（2）微服务集成Seata" class="headerlink" title="（2）微服务集成Seata"></a>（2）微服务集成Seata</h3><p>1.引入相应依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--统一配置管理--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-nacos-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--读取bootstrap文件--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-bootstrap<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--seata--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-alibaba-seata<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>因为我们需要让seata相关配置可以热更新，所以除了seata依赖外，还需要引入nacos统一配置管理和bootstrap依赖。</p>
+<p>共享的seata配置信息如下</p>
+<p><img src="/../images/image-20250416153948770.png" alt="image-20250416153948770"></p>
+<p>2.bootstrap.yml文件如下</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">trade-service</span> <span class="comment"># 服务名称</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">    <span class="attr">active:</span> <span class="string">local</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="number">192.168</span><span class="number">.10</span><span class="number">.101</span> <span class="comment"># nacos地址</span></span><br><span class="line">      <span class="attr">config:</span></span><br><span class="line">        <span class="attr">file-extension:</span> <span class="string">yaml</span> <span class="comment"># 文件后缀名</span></span><br><span class="line">        <span class="attr">shared-configs:</span> <span class="comment"># 共享配置</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">dataId:</span> <span class="string">shared-jdbc.yaml</span> <span class="comment"># 共享mybatis配置</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">dataId:</span> <span class="string">shared-log.yaml</span> <span class="comment"># 共享日志配置</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">dataId:</span> <span class="string">shared-swagger.yaml</span> <span class="comment"># 共享日志配置</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">dataId:</span> <span class="string">cart-service.yaml</span> <span class="comment"># cart参数配置</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">dataId:</span> <span class="string">shared-seata.yaml</span> <span class="comment"># seata配置</span></span><br></pre></td></tr></table></figure>
+
+<p>3.给每个引入seata的微服务所连接的数据库创建undo_log表</p>
+<p>seata的客户端在解决分布式事务的时候需要记录一些中间数据，保存在数据库中。因此我们要先准备一个这样的表。</p>
+<p><img src="/../images/image-20250416155701064.png" alt="image-20250416155701064"></p>
+<p>如此，我们的分布式事务实现所需的所有环境都以及配好了。</p>
+<h3 id="（3）测试"><a href="#（3）测试" class="headerlink" title="（3）测试"></a>（3）测试</h3><p>使用分布式事务需要使用<code>@GlobalTransactional</code>注解</p>
+<p><code>@GlobalTransactional</code>注解就是在标记事务的起点，将来TM就会基于这个方法判断全局事务范围，初始化全局事务。</p>
+<p>所以我们只需要在方法起始入口将<code>@Transactional</code>注解修改为<code>@GlobalTransactional</code>即可。</p>
+<p><img src="/../images/image-20250416175056045.png" alt="image-20250416175056045"></p>
+<p>我们重启<code>trade-service</code>、<code>item-service</code>、<code>cart-service</code>三个服务。再次测试，发现分布式事务的问题解决了！</p>
+<h2 id="2-分布式事务的解决方案"><a href="#2-分布式事务的解决方案" class="headerlink" title="2.分布式事务的解决方案"></a>2.分布式事务的解决方案</h2><p>Seata可以解决分布式事务问题主要是因为它支持四种分布式事务解决方案。</p>
+<ul>
+<li><strong>XA</strong></li>
+<li><strong>TCC</strong></li>
+<li><strong>AT</strong></li>
+<li><strong>SAGA</strong></li>
+</ul>
+<p>这里介绍XA模式和AT模式</p>
+<h3 id="1-XA模式"><a href="#1-XA模式" class="headerlink" title="1.XA模式"></a>1.XA模式</h3><p><code>XA</code> 规范 是<code> X/Open</code> 组织定义的分布式事务处理（DTP，Distributed Transaction Processing）标准，XA 规范 描述了全局的<code>TM</code>与局部的<code>RM</code>之间的接口，几乎所有主流的数据库都对 XA 规范 提供了支持。</p>
+<h4 id="1-两阶段提交"><a href="#1-两阶段提交" class="headerlink" title="(1)两阶段提交"></a>(1)两阶段提交</h4><p>A是规范，目前主流数据库都实现了这种规范，实现的原理都是基于两阶段提交。</p>
+<p>正常情况下：</p>
+<p><img src="/../images/image-20250416180420469.png" alt="image-20250416180420469"></p>
+<p>异常情况下：</p>
+<p><img src="/../images/image-20250416180450436.png" alt="image-20250416180450436"></p>
+<p>一阶段：</p>
+<ul>
+<li>事务协调者(TC)通知每个事务参与者执行本地事务</li>
+<li>本地事务执行完成后报告事务执行状态给事务协调者，<strong>此时事务不提交</strong>，<strong>继续持有数据库锁</strong></li>
+</ul>
+<p>二阶段：</p>
+<ul>
+<li>事务协调者(TC)基于一阶段的报告来判断下一步操作</li>
+<li>如果一阶段都成功，则通知所有事务参与者，提交事务</li>
+<li>如果一阶段<strong>任意一个参与者失败</strong>，则通知所有事务参与者<strong>回滚事务</strong></li>
+</ul>
+<h4 id="2-Seata的XA模型"><a href="#2-Seata的XA模型" class="headerlink" title="(2)Seata的XA模型"></a>(2)Seata的XA模型</h4><p>Seata对原始的XA模式做了简单的封装和改造，以适应自己的事务模型，基本架构如图：</p>
+<p><img src="/../images/image-20250416182627127.png" alt="image-20250416182627127"></p>
+<p>如图所示，可知</p>
+<p><code>RM</code>一阶段的工作：</p>
+<ol>
+<li>注册分支事务到<code>TC</code></li>
+<li>执行分支业务sql但不提交</li>
+<li>报告执行状态到<code>TC</code></li>
+</ol>
+<p><code>TC</code>二阶段的工作：</p>
+<ol>
+<li><code>TC</code>检测各分支事务执行状态<ol>
+<li>如果都成功，通知所有RM提交事务</li>
+<li>如果有失败，通知所有RM回滚事务</li>
+</ol>
+</li>
+</ol>
+<p><code>RM</code>二阶段的工作：</p>
+<ul>
+<li>接收<code>TC</code>指令，提交或回滚事务</li>
+</ul>
+<h4 id="3-优缺点"><a href="#3-优缺点" class="headerlink" title="(3)优缺点"></a>(3)优缺点</h4><p>XA模式的优点是什么？</p>
+<ul>
+<li>事务的强一致性，满足ACID原则</li>
+<li>常用数据库都支持，实现简单，并且没有代码入侵</li>
+</ul>
+<p>XA模式的缺点是什么？</p>
+<ul>
+<li>因为一阶段需要锁定数据库资源，等待二阶段结束才释放，性能较差</li>
+<li>依赖关系型数据库实现事务</li>
+</ul>
+<h4 id="4-实现步骤"><a href="#4-实现步骤" class="headerlink" title="(4)实现步骤"></a>(4)实现步骤</h4><p>要将Seata的默认模式(AT)改为XA模式可以在配置文件中指定要使用的模式。</p>
+<p><img src="/../images/image-20250416183654161.png" alt="image-20250416183654161"></p>
+<h3 id="2-AT模式"><a href="#2-AT模式" class="headerlink" title="2.AT模式"></a>2.AT模式</h3><p><code>AT</code>模式同样是分阶段提交的事务模型，不过缺弥补了<code>XA</code>模型中资源锁定周期过长的缺陷。</p>
+<h4 id="1-Seata的AT模型"><a href="#1-Seata的AT模型" class="headerlink" title="(1)Seata的AT模型"></a>(1)Seata的AT模型</h4><p>基本流程图：</p>
+<p><img src="/../images/image-20250416183855259.png" alt="image-20250416183855259"></p>
+<p>阶段一<code>RM</code>的工作：</p>
+<ul>
+<li>注册分支事务</li>
+<li>记录undo-log（数据快照）</li>
+<li>执行业务sql并提交</li>
+<li>报告事务状态</li>
+</ul>
+<p>阶段二提交时<code>RM</code>的工作：</p>
+<ul>
+<li><strong>删除undo-log即可</strong></li>
+</ul>
+<p>阶段二回滚时<code>RM</code>的工作：	</p>
+<ul>
+<li><strong>根据undo-log恢复数据到更新前</strong></li>
+</ul>
+<h4 id="2-流程梳理"><a href="#2-流程梳理" class="headerlink" title="(2)流程梳理"></a>(2)流程梳理</h4><p>我们用一个真实的业务来梳理下AT模式的原理。</p>
+<p>比如，现在有一个数据库表，记录用户余额：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>id</strong></th>
+<th align="left"><strong>money</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">100</td>
+</tr>
+</tbody></table>
+<p>其中一个分支业务要执行的SQL为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> tb_account <span class="keyword">set</span> money <span class="operator">=</span> money <span class="operator">-</span> <span class="number">10</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>AT模式下，当前分支事务执行流程如下：</p>
+<p><strong>一阶段</strong>：</p>
+<ol>
+<li><code>TM</code>发起并注册全局事务到<code>TC</code></li>
+<li><code>TM</code>调用分支事务</li>
+<li>分支事务准备执行业务SQL</li>
+<li><code>RM</code>拦截业务SQL，根据where条件查询原始数据，形成快照。</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span> <span class="attr">&quot;money&quot;</span><span class="punctuation">:</span> <span class="number">100</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>RM</code>执行业务SQL，提交本地事务，释放数据库锁。此时 money &#x3D; 90</li>
+<li><code>RM</code>报告本地事务状态给<code>TC</code></li>
+</ol>
+<p><strong>二阶段</strong>：</p>
+<ol>
+<li><code>TM</code>通知<code>TC</code>事务结束</li>
+<li><code>TC</code>检查分支事务状态<ol>
+<li>如果都成功，则立即删除快照</li>
+<li>如果有分支事务失败，需要回滚。读取快照数据（{“id”: 1, “money”: 100}），将快照恢复到数据库。此时数据库再次恢复为100</li>
+</ol>
+</li>
+</ol>
+<p>流程图：</p>
+<p><img src="/../images/image-20250416184528983.png" alt="image-20250416184528983"></p>
+<h3 id="AT与XA的区别"><a href="#AT与XA的区别" class="headerlink" title="AT与XA的区别"></a>AT与XA的区别</h3><p>简述<code>AT</code>模式与<code>XA</code>模式最大的区别是什么？</p>
+<ul>
+<li><code>XA</code>模式一阶段不提交事务，锁定资源；<code>AT</code>模式一阶段直接提交，不锁定资源。</li>
+<li><code>XA</code>模式依赖数据库机制实现回滚；<code>AT</code>模式利用数据快照实现数据回滚。</li>
+<li><code>XA</code>模式强一致；<code>AT</code>模式最终一致</li>
+</ul>
+<p>可见，AT模式使用起来更加简单，无业务侵入，性能更好(一阶段过后其他线程也可以进入一阶段)。因此企业90%的分布式事务都可以用AT模式来解决。</p>
+<h3 id="提问"><a href="#提问" class="headerlink" title="提问"></a>提问</h3><h4 id="AT模式是否会出现脏写问题"><a href="#AT模式是否会出现脏写问题" class="headerlink" title="AT模式是否会出现脏写问题"></a>AT模式是否会出现脏写问题</h4><p><strong>脏写问题</strong>：指的是事务1对某个数据项进行了修改，但尚未提交（即事务1的修改处于未完成状态）。此时，事务2读取了事务1修改后的数据，并基于这个数据进行了进一步的修改。如果事务1最终回滚，那么事务1的修改会被撤销，但事务2已经基于事务1的中间状态进行了修改，这会导致数据库中出现不一致的状态。</p>
+<p>脏写问题的关键在于事务1的未提交修改被事务2依赖，而事务1的回滚会导致数据不一致。</p>
+<p><strong>例子</strong></p>
+<p>假设有一个账户余额表，初始余额为100元。</p>
+<ul>
+<li><strong>事务1</strong>：将余额从100元修改为150元（未提交）。</li>
+<li><strong>事务2</strong>：读取了150元的余额，并将其修改为200元（提交）。</li>
+<li><strong>事务1</strong>：回滚，余额恢复为100元。</li>
+</ul>
+<p>此时，事务2的修改（200元）是基于事务1的中间状态（150元），而事务1回滚后，余额又变成了100元。这就导致了数据不一致，因为事务2的修改没有考虑到事务1的回滚操作。</p>
+<p>答：不会，如果 tx1 的二阶段全局回滚，则 tx1 需要重新获取该数据的本地锁，进行反向补偿的更新操作，实现分支的回滚。此时，如果 tx2 仍在等待该数据的 全局锁，同时持有本地锁，则 tx1 的分支回滚会失败。分支的回滚会一直重试，直到 tx2 的全局锁等锁超时，放弃全局锁并回滚本地事务释放本地锁，tx1 的分支回滚最终成功。因为整个过程全局锁在tx1结束前一直是被 tx1持有的，所以不会发生脏写的问题。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">ldy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/04/16/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%80%BB%E7%BB%93/">http://example.com/2025/04/16/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%80%BB%E7%BB%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Journey</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Springcloud/">Springcloud</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2025/03/30/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" title="黑马点评项目总结"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">黑马点评项目总结</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">ldy</div><div class="author-info__description">I am a slow walker,but I never walk backwards.我走得很慢，但是我从来不会后退</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qcqwy"><i class="fab fa-github"></i><span>别点这里</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8"><span class="toc-text">一、服务调用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-RestTemplate"><span class="toc-text">1.RestTemplate</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">案例代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3"><span class="toc-text">代码详解</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-text">2.注册中心</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-text">注册中心原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="toc-text">Nacos注册中心</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E6%AD%A5%E9%AA%A4"><span class="toc-text">部署步骤</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="toc-text">服务注册</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-text">服务发现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-OpenFeign"><span class="toc-text">3.OpenFeign</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-text">快速入门</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-text">1.引入依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%BB%99%E5%90%AF%E5%8A%A8%E7%B1%BB%E6%B7%BB%E5%8A%A0-EnableFeignClients%E6%B3%A8%E8%A7%A3"><span class="toc-text">2.给启动类添加@EnableFeignClients注解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAItemClient%E6%8E%A5%E5%8F%A3"><span class="toc-text">3.新建一个ItemClient接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8OpenFeign"><span class="toc-text">4.使用OpenFeign</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="toc-text">连接池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96-1"><span class="toc-text">1.引入依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%BC%80%E5%90%AF%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="toc-text">2.开启连接池</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AC%E5%85%B1module%E6%8A%BD%E5%8F%96"><span class="toc-text">公共module抽取</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E6%A8%A1%E5%9D%97%EF%BC%8C%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-text">1.创建模块，导入依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8%E6%8A%A5%E9%94%99"><span class="toc-text">2.启动报错</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">3.解决方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE"><span class="toc-text">日志配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E7%BA%A7%E5%88%AB"><span class="toc-text">1.定义日志级别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE"><span class="toc-text">2.配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BD%91%E5%85%B3"><span class="toc-text">二、网关</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BD%91%E5%85%B3%E8%B7%AF%E7%94%B1"><span class="toc-text">1.网关路由</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-text">1.快速入门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%B7%AF%E7%94%B1%E8%BF%87%E6%BB%A4"><span class="toc-text">2.路由过滤</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BD%91%E5%85%B3%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C"><span class="toc-text">2.网关登录校验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%89%B4%E6%9D%83%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">1.鉴权思路分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BD%91%E5%85%B3%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">2.网关过滤器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GatewayFilter%E8%B7%AF%E7%94%B1%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="toc-text">GatewayFilter路由过滤器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E5%99%A8GatewayFilter"><span class="toc-text">自定义过滤器GatewayFilter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89GlobalFilter"><span class="toc-text">自定义GlobalFilter</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C"><span class="toc-text">3.登录校验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="toc-text">4.微服务获取用户信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-OpenFeign%E4%BC%A0%E9%80%92%E7%94%A8%E6%88%B7"><span class="toc-text">5.OpenFeign传递用户</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="toc-text">三、配置管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="toc-text">1.配置共享</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="toc-text">添加共享配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="toc-text">拉取共享配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="toc-text">2.配置热更新</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5"><span class="toc-text">问题引入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8Nacos%E4%B8%AD%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE"><span class="toc-text">在Nacos中添加配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%A8%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%B8%AD%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="toc-text">在微服务中读取配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-text">3.动态路由</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%9B%91%E5%90%ACNacos%E9%85%8D%E7%BD%AE%E5%8F%98%E6%9B%B4"><span class="toc-text">1.监听Nacos配置变更</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%9B%B4%E6%96%B0%E8%B7%AF%E7%94%B1"><span class="toc-text">2.更新路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AE%9E%E7%8E%B0%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1"><span class="toc-text">3.实现动态路由</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BF%9D%E6%8A%A4"><span class="toc-text">四、微服务保护</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5-1"><span class="toc-text">问题引入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%9A%E5%8A%A1%E5%81%A5%E5%A3%AE%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-text">1.业务健壮性问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BA%A7%E8%81%94%E9%97%AE%E9%A2%98"><span class="toc-text">2.级联问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E4%BF%9D%E6%8A%A4%E6%96%B9%E6%A1%88"><span class="toc-text">服务保护方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E9%99%90%E6%B5%81"><span class="toc-text">请求限流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%9A%94%E7%A6%BB"><span class="toc-text">线程隔离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD"><span class="toc-text">服务熔断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sentinel"><span class="toc-text">Sentinel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="toc-text">1.安装和使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%95%B4%E5%90%88"><span class="toc-text">2.微服务整合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%93%8D"><span class="toc-text">实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%B7%E6%B1%82%E9%99%90%E6%B5%81-1"><span class="toc-text">请求限流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E9%9A%94%E7%A6%BB-1"><span class="toc-text">线程隔离</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-OpenFeign%E6%95%B4%E5%90%88Sentinel"><span class="toc-text">1.OpenFeign整合Sentinel</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%BA%BF%E7%A8%8B%E9%9A%94%E7%A6%BB"><span class="toc-text">2.配置线程隔离</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD-1"><span class="toc-text">服务熔断</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E7%BC%96%E5%86%99%E9%99%8D%E7%BA%A7%E9%80%BB%E8%BE%91"><span class="toc-text">1.编写降级逻辑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%9C%8D%E5%8A%A1%E7%86%94%E6%96%AD"><span class="toc-text">2.服务熔断</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">五、分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Seata"><span class="toc-text">1.Seata</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E9%83%A8%E7%BD%B2TC%E6%9C%8D%E5%8A%A1"><span class="toc-text">（1）部署TC服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9B%86%E6%88%90Seata"><span class="toc-text">（2）微服务集成Seata</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E6%B5%8B%E8%AF%95"><span class="toc-text">（3）测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">2.分布式事务的解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-XA%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.XA模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-text">(1)两阶段提交</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-Seata%E7%9A%84XA%E6%A8%A1%E5%9E%8B"><span class="toc-text">(2)Seata的XA模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">(3)优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="toc-text">(4)实现步骤</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-AT%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.AT模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-Seata%E7%9A%84AT%E6%A8%A1%E5%9E%8B"><span class="toc-text">(1)Seata的AT模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86"><span class="toc-text">(2)流程梳理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AT%E4%B8%8EXA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">AT与XA的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E9%97%AE"><span class="toc-text">提问</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#AT%E6%A8%A1%E5%BC%8F%E6%98%AF%E5%90%A6%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%84%8F%E5%86%99%E9%97%AE%E9%A2%98"><span class="toc-text">AT模式是否会出现脏写问题</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/16/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%80%BB%E7%BB%93/" title="微服务总结">微服务总结</a><time datetime="2025-04-16T11:03:26.000Z" title="发表于 2025-04-16 19:03:26">2025-04-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/30/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" title="黑马点评项目总结">黑马点评项目总结</a><time datetime="2025-03-30T10:59:42.000Z" title="发表于 2025-03-30 18:59:42">2025-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/25/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Linux学习笔记">Linux学习笔记</a><time datetime="2025-03-25T10:40:24.000Z" title="发表于 2025-03-25 18:40:24">2025-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/22/Redis%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" title="Redis最佳实践">Redis最佳实践</a><time datetime="2025-03-22T10:01:40.000Z" title="发表于 2025-03-22 18:01:40">2025-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/07/Redis%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0/" title="黑马点评笔记">黑马点评笔记</a><time datetime="2025-03-07T12:44:20.000Z" title="发表于 2025-03-07 20:44:20">2025-03-07</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://t.alcy.cc/fj/')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By ldy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
