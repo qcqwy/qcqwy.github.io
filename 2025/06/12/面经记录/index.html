@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>面经记录 | Journey</title><meta name="author" content="ldy"><meta name="copyright" content="ldy"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1.处女面-行觅科技初创型公司 时间：2025&#x2F;6&#x2F;12 20:00 （1）自我介绍 （2）个人学习项目选择的目的 （3）elasticsearch的搜索原理 （4）场景：订单如果要存储在elasticsearch中，那么订单状态字段适合用什么数据类型。——考察es的数据类型，但我忘了 （5）mysql的慢查询定位 （6）mysql中B+的实现和优缺点 （7）最左匹配原则 （8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面经记录">
+<meta property="og:url" content="http://example.com/2025/06/12/%E9%9D%A2%E7%BB%8F%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Journey">
+<meta property="og:description" content="1.处女面-行觅科技初创型公司 时间：2025&#x2F;6&#x2F;12 20:00 （1）自我介绍 （2）个人学习项目选择的目的 （3）elasticsearch的搜索原理 （4）场景：订单如果要存储在elasticsearch中，那么订单状态字段适合用什么数据类型。——考察es的数据类型，但我忘了 （5）mysql的慢查询定位 （6）mysql中B+的实现和优缺点 （7）最左匹配原则 （8">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png">
+<meta property="article:published_time" content="2025-06-12T12:49:19.000Z">
+<meta property="article:modified_time" content="2025-08-15T16:30:54.101Z">
+<meta property="article:author" content="ldy">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png"><link rel="shortcut icon" href="/img/logo2.jpeg"><link rel="canonical" href="http://example.com/2025/06/12/%E9%9D%A2%E7%BB%8F%E8%AE%B0%E5%BD%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体中文","cht_to_chs":"你已切换为简体中文","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '面经记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2025-08-16 00:30:54'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://t.alcy.cc/fj/')"><nav id="nav"><span id="blog-info"><a href="/" title="Journey"><img class="site-icon" src="/img/logo.jpeg"/><span class="site-name">Journey</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">面经记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-12T12:49:19.000Z" title="发表于 2025-06-12 20:49:19">2025-06-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-08-15T16:30:54.101Z" title="更新于 2025-08-16 00:30:54">2025-08-16</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="面经记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1-处女面-行觅科技"><a href="#1-处女面-行觅科技" class="headerlink" title="1.处女面-行觅科技"></a>1.处女面-行觅科技</h2><p>初创型公司</p>
+<p>时间：2025&#x2F;6&#x2F;12 20:00</p>
+<p>（1）自我介绍</p>
+<p>（2）个人学习项目选择的目的</p>
+<p>（3）elasticsearch的搜索原理</p>
+<p>（4）场景：订单如果要存储在elasticsearch中，那么订单状态字段适合用什么数据类型。——考察es的数据类型，但我忘了</p>
+<p>（5）mysql的慢查询定位</p>
+<p>（6）mysql中B+的实现和优缺点</p>
+<p>（7）最左匹配原则</p>
+<p>（8）mybatis的实现原理 ——学习过，但忘记了</p>
+<p>（9）mybatis-plus和mybatis的区别，以及取舍，什么情况下适合用mp,什么情况不适合。</p>
+<p>（10）linux中搜索日志的命令</p>
+<p>（11）个人提问 </p>
+<p>总结：面试官很好，很热心为我解答不会的地方。但我回答的依托，说明了我的不足之处，需要举一反三，考虑技术的优缺点。挂了。</p>
+<h2 id="2-开斧市"><a href="#2-开斧市" class="headerlink" title="2.开斧市"></a>2.开斧市</h2><p>时间：2025&#x2F;6&#x2F;16 15:15</p>
+<p>（1）vue熟悉吗 ——了解过</p>
+<p>（2）讲讲阻塞队列</p>
+<p>（3）讲讲CountDownLatch</p>
+<p>（4）讲讲Spring的AOP，什么作用，底层实习（两种动态代理）</p>
+<p>（5）Mysql中LEFT JOIN和RIGHT JOIN</p>
+<p>（6）Mysql的存储引擎innodb和mysaim的区别</p>
+<p>（7）java的值传递和引用传递</p>
+<p>（8）HTTP和HTTPS的区别，TCP和HTTP的区别？（没学过，计网还没学，我平常也没学习过）</p>
+<p>总结：答得依托。问的有点奇怪。太突然了，脑袋昏沉的，细节忘了。</p>
+<h3 id="java中值传递和引用传递区分："><a href="#java中值传递和引用传递区分：" class="headerlink" title="java中值传递和引用传递区分："></a>java中值传递和引用传递区分：</h3><h4 id="什么是值传递，什么是引用传递？"><a href="#什么是值传递，什么是引用传递？" class="headerlink" title="什么是值传递，什么是引用传递？"></a>什么是值传递，什么是引用传递？</h4><p>1.引用传递：</p>
+<ul>
+<li>在引用传递中，方法参数接收的是变量的地址（引用），而不是变量的值。</li>
+<li>如果在方法内部修改了传递的参数，这个修改会影响到方法外部的原变量。</li>
+<li>引用传递允许在方法内通过引用直接操作原始数据。</li>
+</ul>
+<p>2.值传递：</p>
+<ul>
+<li>在值传递中，方法参数接收的是变量的值的拷贝，而不是变量本身。</li>
+<li>如果在方法内部修改了传递的参数，这个修改不会影响到方法外部的原变量。</li>
+<li>值传递将参数的实际值传递给方法，使得方法内部无法直接访问原变量的地址。</li>
+</ul>
+<h4 id="java里为什么只有值传递？"><a href="#java里为什么只有值传递？" class="headerlink" title="java里为什么只有值传递？"></a>java里为什么只有值传递？</h4><p>首先，在java中，引用类型变量实际上存储的是引用对象的地址，而不是对象本身。</p>
+<p>在作为方法参数进行传递时，会将变量的值，也就是引用地址传递给方法参数。这与值传递的概念相吻合。所以，尽管对于引用传参，方法接收到的是引用地址，但它实际上是通过值传递的方式进行传递的。</p>
+<h4 id="回答："><a href="#回答：" class="headerlink" title="回答："></a>回答：</h4><p>嗯，java里实际上是只有值传递。这里有个误区，就是部分观点认为引用类型是引用传递，这个看法是从对象角度理解的，就是引用类型对象进行参数传递时，因为方法内部的引用变量和原变量指向都是同一个对象，导致方法内部对引用变量的修改会反映到原变量上，所以认为java里的引用类型是引用传递，但这个说法并不准确，因为当给方法内的引用变量重新赋值指向一个新的变量时，对这个变量的修改就不会影响到原变量上。而在方法参数传递的角度来看，引用类型就是值传递。因为<strong>引用类型变量存储的是对象的存放地址，而不是对象本身，在传递给方法时，方法接收的就是变量的值的拷贝，也就是对象存放地址的拷贝，从这一角度看，引用类型就是值传递的</strong>。</p>
+<h2 id="3-杭州磐太科技"><a href="#3-杭州磐太科技" class="headerlink" title="3.杭州磐太科技"></a>3.杭州磐太科技</h2><p>20-99人</p>
+<p>时间：2025&#x2F;8&#x2F;15 14:00</p>
+<p>（1）java基本数据类型</p>
+<p>8种，byte、short、int、long、float、double、boolean、char</p>
+<p>byte忘记了，有点尬</p>
+<p>（2）包装类型的缓存</p>
+<p>（3）java集合有哪些，哪些是线程安全的</p>
+<p>集合这块还没系统学习过，线程安全的类只答了个concurrentHashMap</p>
+<p>（4）springIoc和DI</p>
+<p>（5）springBoot自动装配原理</p>
+<p>（6）springmvc工作流程</p>
+<p>没去记过，不会</p>
+<p>（7）controller层常用注解</p>
+<p>（8）bean的生命周期</p>
+<p>（9）mysql有哪些索引类型</p>
+<p>这个没答全</p>
+<p>数据结构：B+Tree索引、Hash索引、R-Tree索引（空间索引）、Full-Text索引（倒排索引）</p>
+<p>逻辑功能：主键索引、唯一索引、普通索引、联合索引、前缀索引</p>
+<p>（10）mysql执行一条sql的执行流程</p>
+<p>（11）四大隔离级别</p>
+<p>（12）什么隔离级别会出现幻读问题</p>
+<p>（13）redis基本数据类型</p>
+<p>（14）redis的持久化策略</p>
+<p>（15）最近最熟悉的项目，项目的业务闭环，开头到结尾怎么进行逻辑处理，就是业务流程。</p>
+<p>这个真的讲不来啊，一个学习的项目，顶多就是实现功能，哪会去想闭环啊。</p>
+<p>（16）项目的身份校验权限怎么实现的</p>
+<p>（17）项目中的redis做什么用的</p>
+<p>（18）redis的热点数据怎么处理</p>
+<p>（19）反问</p>
+<p>面试官说：知识点还是比较全面的，就是还是太紧张了</p>
+<p>总结：</p>
+<p>大部分都答得上来了，比前两次好些，但是还是太紧张了！！！答完之后半小时就打来电话说面试通过了。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">ldy</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/06/12/%E9%9D%A2%E7%BB%8F%E8%AE%B0%E5%BD%95/">http://example.com/2025/06/12/%E9%9D%A2%E7%BB%8F%E8%AE%B0%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Journey</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%9D%A2%E8%AF%95/">面试</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2025/07/11/%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/" title="开发常见问题汇总"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">开发常见问题汇总</div></div></a></div><div class="next-post pull-right"><a href="/2025/06/01/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="Java网络编程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java网络编程</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://cdn.jsdelivr.net/gh/qcqwy/blog-img@main/img/poke1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">ldy</div><div class="author-info__description">I am a slow walker,but I never walk backwards.我走得很慢，但是我从来不会后退</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">10</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/qcqwy"><i class="fab fa-github"></i><span>别点这里</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%A4%84%E5%A5%B3%E9%9D%A2-%E8%A1%8C%E8%A7%85%E7%A7%91%E6%8A%80"><span class="toc-text">1.处女面-行觅科技</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%BC%80%E6%96%A7%E5%B8%82"><span class="toc-text">2.开斧市</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#java%E4%B8%AD%E5%80%BC%E4%BC%A0%E9%80%92%E5%92%8C%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%E5%8C%BA%E5%88%86%EF%BC%9A"><span class="toc-text">java中值传递和引用传递区分：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%8C%E4%BB%80%E4%B9%88%E6%98%AF%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%EF%BC%9F"><span class="toc-text">什么是值传递，什么是引用传递？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#java%E9%87%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%8F%AA%E6%9C%89%E5%80%BC%E4%BC%A0%E9%80%92%EF%BC%9F"><span class="toc-text">java里为什么只有值传递？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E7%AD%94%EF%BC%9A"><span class="toc-text">回答：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9D%AD%E5%B7%9E%E7%A3%90%E5%A4%AA%E7%A7%91%E6%8A%80"><span class="toc-text">3.杭州磐太科技</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/18/%E9%9D%A2%E7%BB%8F%E6%94%B6%E9%9B%86/" title="面经收集">面经收集</a><time datetime="2025-08-18T05:03:46.000Z" title="发表于 2025-08-18 13:03:46">2025-08-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/08/15/%E6%B7%B1%E5%85%A5java%E9%9B%86%E5%90%88/" title="深入java集合">深入java集合</a><time datetime="2025-08-15T09:57:34.000Z" title="发表于 2025-08-15 17:57:34">2025-08-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/07/11/%E5%BC%80%E5%8F%91%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%B1%87%E6%80%BB/" title="开发常见问题汇总">开发常见问题汇总</a><time datetime="2025-07-11T15:59:20.000Z" title="发表于 2025-07-11 23:59:20">2025-07-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/12/%E9%9D%A2%E7%BB%8F%E8%AE%B0%E5%BD%95/" title="面经记录">面经记录</a><time datetime="2025-06-12T12:49:19.000Z" title="发表于 2025-06-12 20:49:19">2025-06-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/01/java%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="Java网络编程">Java网络编程</a><time datetime="2025-06-01T13:07:08.000Z" title="发表于 2025-06-01 21:07:08">2025-06-01</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://t.alcy.cc/fj/')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By ldy</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
